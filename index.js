@@ -2,10 +2,16 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import authRouter from './routes/authRouter.js';
 dotenv.config();
 const app = express();
 const corsMiddleware = cors();
 app.use(corsMiddleware);
+app.use(express.json());
+app.use("/api/auth", authRouter);
+app.use((req, res) => {
+    res.status(404).json({ message: "Not found" });
+});
 const { DB_HOST, PORT } = process.env;
 if (!DB_HOST) {
     console.error('DB_HOST is not defined in environment variables');
@@ -13,7 +19,7 @@ if (!DB_HOST) {
 }
 mongoose.connect(DB_HOST)
     .then(() => {
-    app.listen(PORT, () => console.log('Server is runing!'));
+    app.listen(3000, () => console.log('Server is runing!'));
 })
     .catch(error => {
     console.log(error.message);

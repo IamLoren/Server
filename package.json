@@ -20,6 +20,8 @@
 
      "dependencies": {
 
+          "bcrypt": "^5.1.1",
+
           "cloudinary": "^2.5.0",
 
           "cors": "^2.8.5",
@@ -28,13 +30,21 @@
 
           "express": "^4.21.0",
 
-          "mongoose": "^8.7.0"
+          "joi": "^17.13.3",
+
+          "jsonwebtoken": "^9.0.2",
+
+          "mongoose": "^8.7.0",
+
+          "nanoid": "^5.0.7"
 
      },
 
      "devDependencies": {
 
           "@eslint/js": "^9.11.1",
+
+          "@types/bcrypt": "^5.0.2",
 
           "@types/cors": "^2.8.17",
 

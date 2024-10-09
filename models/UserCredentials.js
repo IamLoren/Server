@@ -1,34 +1,39 @@
-import { Schema, model } from "mongoose";
-import { emailRegexp } from "../constants/regexp";
+import { Schema, model } from 'mongoose';
+import { emailRegexp } from '../constants/regexp.js';
 const userCredentialsSchema = new Schema({
     firstName: {
         type: String,
         minlength: 2,
         maxlength: 20,
-        required: [true, "firstName is required"]
+        required: [true, 'firstName is required'],
     },
     lastName: {
         type: String,
         minlength: 2,
         maxlength: 20,
-        required: [true, "lastName is required"]
+        required: [true, 'lastName is required'],
     },
     password: {
         type: String,
         minlength: 8,
-        maxlength: 20,
-        required: [true, "Password is required"]
+        maxlength: 100,
+        required: [true, 'Password is required'],
     },
     email: {
         type: String,
-        required: [true, "Email is required"],
+        required: [true, 'Email is required'],
         match: emailRegexp,
         unique: true,
     },
-    token: {
+    role: {
         type: String,
-        default: null,
+        enum: ['admin', 'user'],
+        default: 'user',
     },
-});
-const UserCredentials = model("userCredentials", userCredentialsSchema);
+    // token: {
+    //     type: String,
+    //     default: null,
+    // },
+}, { versionKey: false, timestamps: true });
+const UserCredentials = model('userCredentials', userCredentialsSchema);
 export default UserCredentials;
