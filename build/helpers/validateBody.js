@@ -1,6 +1,6 @@
 import HttpError from './HTTPError.js';
 const validateBody = (schema) => {
-    const func = (req, res, next) => {
+    const func = (req, _, next) => {
         const { error } = schema.validate(req.body);
         if (error) {
             next(HttpError(400, error.message));
@@ -12,3 +12,4 @@ const validateBody = (schema) => {
     return func;
 };
 export default validateBody;
+//# sourceMappingURL=validateBody.js.map

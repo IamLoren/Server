@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import {emailRegexp} from "../constants/regexp";
 
 const userProfileSchema = new Schema({
     userId: {

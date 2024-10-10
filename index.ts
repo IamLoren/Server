@@ -12,9 +12,12 @@ const corsMiddleware = cors();
 app.use(corsMiddleware);
 app.use(express.json());
 
-app.use("/api/auth", authRouter)
+app.use("/api/auth", authRouter);
 
-app.use((req, res) => {
+
+
+
+app.use((_, res) => {
     res.status(404).json({message: "Not found"})
 })
 
@@ -26,7 +29,7 @@ if (!DB_HOST) {
 
 mongoose.connect(DB_HOST)
 .then(()=> {
-    app.listen(3000, () => console.log('Server is runing!'));
+    app.listen(PORT, () => console.log('Server is runing!'));
 })
 .catch(error => {
     console.log(error.message)

@@ -1,46 +1,82 @@
-import { Request, Response } from "express";
-import { nanoid } from "nanoid";
-import * as authServices from "../services/authServices.js";
-import { signUpArguments } from "../types";
-import HttpError from "../helpers/HTTPError.js";
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { NextFunction, Request, Response } from 'express'
+import bcrypt from 'bcrypt'
+import * as authServices from '../services/authServices.js'
+import { signUpArguments } from '../types/authTypes.js'
+import HttpError from '../helpers/HTTPError.js'
 
 interface RegisterReq extends Request {
-  body: signUpArguments;
+    body: signUpArguments
 }
 
 interface RegisterRes extends Response {
-  status: (statusCode: number) => this;
-  json: (body: {
-    // token: string | null;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: "admin" | "user";
-  }) => this;
+    status: (statusCode: number) => this
+    json: (body: {
+        // token: string | null;
+        firstName: string
+        lastName: string
+        email: string
+        role: 'admin' | 'user'
+    }) => this
 }
 
-const register = async (req: RegisterReq, res: RegisterRes) => {
+const register = async (
+    req: RegisterReq,
+    res: RegisterRes,
+    next: NextFunction
+) => {
+    try {
+        const { email } = req.body
 
-  const { email } = req.body;
+        const user = await authServices.findUser({ email })
+        if (user) {
+            throw HttpError(409, 'Email in use')
+        }
 
-  const user = await authServices.findUser({ email });
-  if (user) {
-    throw HttpError(409, "Email in use");
-  }
+        const newUser = await authServices.signUp(req.body)
+        await newUser.save()
 
-  const newUser = await authServices.signUp(req.body);
-  await newUser.save();
+        res.status(201).json({
+            // token,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
+            role: newUser.role,
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 
-  res.status(201).json({
-    // token,
-    firstName: newUser.firstName,
-    lastName: newUser.lastName,
-    email: newUser.email,
-    role: newUser.role,
-  });
-};
+const login = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, password } = req.body
+
+        const user = await authServices.findUser({ email })
+        if (!user) {
+            throw HttpError(401, 'Invalid email or password')
+        }
+        const passwordCompare = await bcrypt.compare(password, user.password)
+        if (!passwordCompare) {
+            throw HttpError(401, 'Invalid email or password')
+        }
+
+        // const token = await sign(user);
+
+        // res.json({
+        //   token,
+        //   user: {
+        //     email,
+        //     createdAt: user.createdAt,
+        //     theme: user.theme,
+        //     avatarURL: user.avatarURL,
+        //   },
+        // });
+    } catch (error) {
+        next(error)
+    }
+}
 
 export default {
-  register: ctrlWrapper(register),
-};
+    register,
+    login,
+}

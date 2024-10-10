@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { emailRegexp } from '../constants/regexp.js';
 const userCredentialsSchema = new Schema({
     firstName: {
         type: String,
@@ -22,7 +21,7 @@ const userCredentialsSchema = new Schema({
     email: {
         type: String,
         required: [true, 'Email is required'],
-        match: emailRegexp,
+        match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         unique: true,
     },
     role: {
@@ -37,3 +36,4 @@ const userCredentialsSchema = new Schema({
 }, { versionKey: false, timestamps: true });
 const UserCredentials = model('userCredentials', userCredentialsSchema);
 export default UserCredentials;
+//# sourceMappingURL=UserCredentials.js.map

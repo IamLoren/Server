@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import {IUserCredentials, signUpArguments} from "../types"
+import {IUserCredentials, signUpArguments} from "../types/authTypes"
 import { FilterQuery } from "mongoose";
 import UserCredentials from "../models/UserCredentials.js";
 

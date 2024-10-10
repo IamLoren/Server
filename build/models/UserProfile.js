@@ -14,3 +14,4 @@ const userProfileSchema = new Schema({
 });
 const UserProfile = model("userProfile", userProfileSchema);
 export default UserProfile;
+//# sourceMappingURL=UserProfile.js.map

@@ -1,6 +1,4 @@
-import { Schema, model } from 'mongoose'
-import { emailRegexp } from '../constants/regexp.js'
-import { handleSaveError, setUpdateSetting } from './hooks';
+import { Schema, model } from 'mongoose';
 
 const userCredentialsSchema = new Schema(
     {
@@ -25,7 +23,7 @@ const userCredentialsSchema = new Schema(
         email: {
             type: String,
             required: [true, 'Email is required'],
-            match: emailRegexp,
+            match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
             unique: true,
         },
         role: {

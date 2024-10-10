@@ -11,3 +11,4 @@ const HttpError = (status, message = messageList[status]) => {
     return error;
 };
 export default HttpError;
+//# sourceMappingURL=HTTPError.js.map

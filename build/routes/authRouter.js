@@ -1,7 +1,9 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import authController from "../controllers/authController.js";
-import { signUpSchema } from "../schemas/userCredentialSchema.js";
+import { signInSchema, signUpSchema } from "../schemas/userCredentialSchema.js";
 const authRouter = express.Router();
 authRouter.post("/signup", validateBody(signUpSchema), authController.register);
+authRouter.post("/signin", validateBody(signInSchema), authController.login);
 export default authRouter;
+//# sourceMappingURL=authRouter.js.map
