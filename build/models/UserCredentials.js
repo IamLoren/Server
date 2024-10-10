@@ -29,10 +29,10 @@ const userCredentialsSchema = new Schema({
         enum: ['admin', 'user'],
         default: 'user',
     },
-    // token: {
-    //     type: String,
-    //     default: null,
-    // },
+    token: {
+        type: String,
+        default: null,
+    },
 }, { versionKey: false, timestamps: true });
 const UserCredentials = model('userCredentials', userCredentialsSchema);
 export default UserCredentials;

@@ -2,20 +2,27 @@ import { Schema, model } from "mongoose";
 
 const userProfileSchema = new Schema({
     userId: {
-        type: String,
+        type: Object,
         required: [true, "userId is required"]
     },
     avatarURL: {
         type: String,
         default: null,
     },
-    // favorite: {
-    //     type: String,
-    // },
-    
+    favorites: {
+        type: [String],
+    },
+    history: {
+        type: [String],
+    },
+    theme: {
+        type: String,
+        enum: ["light", "dark"],
+        default: "light",
+    },
+},
+{ versionKey: false, timestamps: true })
 
-})
-
-const UserProfile = model("userProfile", userProfileSchema);
+const UserProfile = model("userprofiles", userProfileSchema);
 
 export default UserProfile;

@@ -8,6 +8,7 @@ declare const UserCredentials: import("mongoose").Model<{
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -17,6 +18,7 @@ declare const UserCredentials: import("mongoose").Model<{
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -26,6 +28,7 @@ declare const UserCredentials: import("mongoose").Model<{
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -42,6 +45,7 @@ declare const UserCredentials: import("mongoose").Model<{
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -51,6 +55,7 @@ declare const UserCredentials: import("mongoose").Model<{
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }>> & import("mongoose").FlatRecord<{
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -60,6 +65,7 @@ declare const UserCredentials: import("mongoose").Model<{
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     _id: import("mongoose").Types.ObjectId;
 } & {

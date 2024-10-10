@@ -9,6 +9,7 @@ export declare const signUp: (data: signUpArguments) => Promise<import("mongoose
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -18,6 +19,7 @@ export declare const signUp: (data: signUpArguments) => Promise<import("mongoose
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -32,6 +34,7 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -41,6 +44,7 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -54,6 +58,7 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -63,6 +68,7 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -76,6 +82,66 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
+}, "findOne", {}>;
+export declare const findUserById: (id: any) => import("mongoose").Query<(import("mongoose").Document<unknown, {}, {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    role: "admin" | "user";
+    token: string;
+}> & {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    role: "admin" | "user";
+    token: string;
+} & {
+    _id: import("mongoose").Types.ObjectId;
+} & {
+    __v?: number;
+}) | null, import("mongoose").Document<unknown, {}, {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    role: "admin" | "user";
+    token: string;
+}> & {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    role: "admin" | "user";
+    token: string;
+} & {
+    _id: import("mongoose").Types.ObjectId;
+} & {
+    __v?: number;
+}, {}, {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+    role: "admin" | "user";
+    token: string;
 }, "findOne", {}>;
 export declare const setToken: (id: string, token?: string) => import("mongoose").Query<(import("mongoose").Document<unknown, {}, {
     createdAt: NativeDate;
@@ -86,6 +152,7 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -95,6 +162,7 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -108,6 +176,7 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -117,6 +186,7 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -130,4 +200,5 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     password: string;
     email: string;
     role: "admin" | "user";
+    token: string;
 }, "findOneAndUpdate", {}>;
