@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import * as authServices from '../services/authServices.js'
 import { signUpArguments } from '../types/authTypes.js'
-import HttpError from '../helpers/HTTPError.js'
+import HttpError from '../services/HTTPError.js'
 
 interface RegisterReq extends Request {
     body: signUpArguments

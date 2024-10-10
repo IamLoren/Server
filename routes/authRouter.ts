@@ -1,6 +1,6 @@
 import express from "express";
 
-import validateBody from "../helpers/validateBody.js";
+import validateBody from "../middleware/validateBody.js";
 import authController from "../controllers/authController.js";
 import { signInSchema, signUpSchema } from "../schemas/userCredentialSchema.js";
 
