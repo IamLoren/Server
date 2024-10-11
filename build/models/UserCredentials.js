@@ -1,5 +1,8 @@
-import { Schema, model } from 'mongoose';
-const userCredentialsSchema = new Schema({
+import { Schema, Types, model } from 'mongoose';
+const userCredentialsSchema = new Schema({ id: {
+        type: Types.ObjectId,
+        ref: 'UserCredentials'
+    },
     firstName: {
         type: String,
         minlength: 2,

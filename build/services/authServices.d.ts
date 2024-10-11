@@ -10,6 +10,15 @@ export declare const signUp: (data: signUpArguments) => Promise<import("mongoose
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -20,6 +29,15 @@ export declare const signUp: (data: signUpArguments) => Promise<import("mongoose
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -35,6 +53,15 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -45,6 +72,15 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -59,6 +95,15 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -69,6 +114,15 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -83,6 +137,15 @@ export declare const findUser: (filter: FilterQuery<IUserCredentials>) => import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }, "findOne", {}>;
 export declare const findUserById: (id: any) => import("mongoose").Query<(import("mongoose").Document<unknown, {}, {
     createdAt: NativeDate;
@@ -94,6 +157,15 @@ export declare const findUserById: (id: any) => import("mongoose").Query<(import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -104,6 +176,15 @@ export declare const findUserById: (id: any) => import("mongoose").Query<(import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -118,6 +199,15 @@ export declare const findUserById: (id: any) => import("mongoose").Query<(import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -128,6 +218,15 @@ export declare const findUserById: (id: any) => import("mongoose").Query<(import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -142,6 +241,15 @@ export declare const findUserById: (id: any) => import("mongoose").Query<(import
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }, "findOne", {}>;
 export declare const setToken: (id: string, token?: string) => import("mongoose").Query<(import("mongoose").Document<unknown, {}, {
     createdAt: NativeDate;
@@ -153,6 +261,15 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -163,6 +280,15 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -177,6 +303,15 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
@@ -187,6 +322,15 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
@@ -201,4 +345,13 @@ export declare const setToken: (id: string, token?: string) => import("mongoose"
     email: string;
     role: "admin" | "user";
     token: string;
+    id?: {
+        prototype?: import("mongoose").Types.ObjectId | null | undefined;
+        cacheHexString?: unknown;
+        generate?: {} | null | undefined;
+        createFromTime?: {} | null | undefined;
+        createFromHexString?: {} | null | undefined;
+        createFromBase64?: {} | null | undefined;
+        isValid?: {} | null | undefined;
+    } | null | undefined;
 }, "findOneAndUpdate", {}>;
