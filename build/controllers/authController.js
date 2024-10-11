@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import * as authServices from '../services/authServices.js';
-import HttpError from '../helpers/HTTPError.js';
+import HttpError from '../services/HTTPError.js';
+import { nanoid } from 'nanoid';
+import UserProfile from '../models/UserProfile.js';
 const register = async (req, res, next) => {
     try {
         const { email } = req.body;
@@ -8,10 +11,16 @@ const register = async (req, res, next) => {
         if (user) {
             throw HttpError(409, 'Email in use');
         }
-        const newUser = await authServices.signUp(req.body);
-        await newUser.save();
+        const { JWT_SECRET } = process.env;
+        const jwtPayload = nanoid();
+        const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: "12h" });
+        const newUser = await authServices.signUp({ ...req.body, token });
+        const newUserProfile = new UserProfile({
+            userId: newUser._id,
+        });
+        await newUserProfile.save();
         res.status(201).json({
-            // token,
+            token,
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             email: newUser.email,
@@ -25,31 +34,46 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const user = await authServices.findUser({ email });
-        if (!user) {
+        const foundedUser = await authServices.findUser({ email });
+        if (!foundedUser) {
             throw HttpError(401, 'Invalid email or password');
         }
-        const passwordCompare = await bcrypt.compare(password, user.password);
+        const passwordCompare = await bcrypt.compare(password, foundedUser.password);
         if (!passwordCompare) {
             throw HttpError(401, 'Invalid email or password');
         }
-        // const token = await sign(user);
-        // res.json({
-        //   token,
-        //   user: {
-        //     email,
-        //     createdAt: user.createdAt,
-        //     theme: user.theme,
-        //     avatarURL: user.avatarURL,
-        //   },
-        // });
+        console.log(`foundedUser: ${foundedUser}`);
+        const { JWT_SECRET } = process.env;
+        const jwtPayload = nanoid();
+        const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: "12h" });
+        const userProfile = await UserProfile.findOne({ userId: foundedUser._id });
+        console.log(`userProfile: ${userProfile}`);
+        res.json({
+            token,
+            user: {
+                _id: foundedUser._id,
+                email: foundedUser.email,
+                firstName: foundedUser.firstName,
+                lastName: foundedUser.lastName,
+                theme: userProfile?.theme,
+                avatarURL: userProfile?.avatarURL,
+            },
+        });
     }
     catch (error) {
         next(error);
     }
 };
+const getCurrent = async (req, res) => {
+    console.log(req);
+    const { email, avatarURL, theme } = req.user;
+    res
+        .status(200)
+        .json({ email, avatarURL, theme });
+};
 export default {
     register,
     login,
+    getCurrent
 };
 //# sourceMappingURL=authController.js.map

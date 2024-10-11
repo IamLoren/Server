@@ -8,6 +8,9 @@ export const signUp = async (data) => {
 export const findUser = (filter) => {
     return UserCredentials.findOne(filter);
 };
+export const findUserById = (id) => {
+    return UserCredentials.findById(id);
+};
 export const setToken = (id, token = "") => {
     return UserCredentials.findByIdAndUpdate(id, { token });
 };
