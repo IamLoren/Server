@@ -1,26 +1,65 @@
 import { Schema } from "mongoose";
 declare const UserProfile: import("mongoose").Model<{
-    userId: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    userId: any;
     avatarURL: string;
+    favorites: string[];
+    history: string[];
+    theme: "light" | "dark";
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
-    userId: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    userId: any;
     avatarURL: string;
+    favorites: string[];
+    history: string[];
+    theme: "light" | "dark";
 }> & {
-    userId: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    userId: any;
     avatarURL: string;
+    favorites: string[];
+    history: string[];
+    theme: "light" | "dark";
 } & {
     _id: import("mongoose").Types.ObjectId;
 } & {
     __v?: number;
-}, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
-    userId: string;
+}, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, {
+    versionKey: false;
+    timestamps: true;
+}, {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    userId: any;
     avatarURL: string;
+    favorites: string[];
+    history: string[];
+    theme: "light" | "dark";
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
-    userId: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    userId: any;
     avatarURL: string;
+    favorites: string[];
+    history: string[];
+    theme: "light" | "dark";
 }>> & import("mongoose").FlatRecord<{
-    userId: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
+    userId: any;
     avatarURL: string;
+    favorites: string[];
+    history: string[];
+    theme: "light" | "dark";
 }> & {
     _id: import("mongoose").Types.ObjectId;
 } & {

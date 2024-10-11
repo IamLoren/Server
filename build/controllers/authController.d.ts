@@ -1,19 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { signUpArguments } from '../types/authTypes.js';
-interface RegisterReq extends Request {
-    body: signUpArguments;
-}
-interface RegisterRes extends Response {
-    status: (statusCode: number) => this;
-    json: (body: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        role: 'admin' | 'user';
-    }) => this;
-}
+import { RegisterReq, RegisterRes } from '../types/authTypes.js';
 declare const _default: {
     register: (req: RegisterReq, res: RegisterRes, next: NextFunction) => Promise<void>;
     login: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    getCurrent: (req: any, res: any) => Promise<void>;
 };
 export default _default;
