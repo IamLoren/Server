@@ -23,12 +23,14 @@ export interface IUserCredentials {
 export interface RegisterRes extends Response {
     status: (statusCode: number) => this
     json: (body: {
-        id: Types.ObjectId
         token: string | null
-        firstName: string
-        lastName: string
-        email: string
-        role: 'admin' | 'user'
+        user: {
+            id: Types.ObjectId
+            firstName: string
+            lastName: string
+            email: string
+            role: 'admin' | 'user'
+        }
     }) => this
 }
 
@@ -58,7 +60,7 @@ export interface signInRes extends Response {
 
 export interface currentReq extends Request {
     body: {
-        user:  {
+        user: {
             email: string
             avatarURL: string
             theme: string
@@ -68,11 +70,5 @@ export interface currentReq extends Request {
 
 export interface currentRes extends Response {
     status: (statusCode: number) => this
-    json: (
-        body: {
-            email: string
-            avatarURL: string
-            theme: string
-        }
-    ) => this
+    json: (body: { email: string; avatarURL: string; theme: string }) => this
 }

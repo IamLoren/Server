@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { NextFunction, Request, Response } from 'express'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
 import * as authServices from '../services/authServices.js'
 import {
@@ -40,11 +40,13 @@ const register = async (
 
         res.status(201).json({
             token,
-            id: newUser._id,
-            firstName: newUser.firstName,
-            lastName: newUser.lastName,
-            email: newUser.email,
-            role: newUser.role,
+            user: {
+                id: newUser._id,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                role: newUser.role,
+            },
         })
     } catch (error) {
         next(error)
@@ -91,7 +93,11 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
     }
 }
 
-const getCurrent = async (req:currentReq, res: currentRes, next: NextFunction) => {
+const getCurrent = async (
+    req: currentReq,
+    res: currentRes,
+    next: NextFunction
+) => {
     try {
         const { email, avatarURL, theme } = req.body.user
         res.status(200).json({ email, avatarURL, theme })
@@ -101,9 +107,8 @@ const getCurrent = async (req:currentReq, res: currentRes, next: NextFunction) =
 }
 
 const logout = async (req: Request, res: Response, next: NextFunction) => {
-
     try {
-        const { _id } = req.body.user;
+        const { _id } = req.body.user
         await authServices.setToken(_id)
         res.status(204).end()
     } catch (error) {
@@ -115,5 +120,5 @@ export default {
     register,
     login,
     getCurrent,
-    logout
+    logout,
 }
