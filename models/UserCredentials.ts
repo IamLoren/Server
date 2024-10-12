@@ -38,6 +38,10 @@ const userCredentialsSchema = new Schema(
             type: String,
             default: null,
         },
+        terms: {
+            type: Boolean,
+            default: null,
+        }
     },
     { versionKey: false, timestamps: true }
 )
