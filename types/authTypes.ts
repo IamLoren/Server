@@ -9,6 +9,7 @@ export interface signUpArguments {
     email: string
     role: 'admin' | 'user'
     token?: string | null
+    terms: boolean
 }
 
 export interface IUserCredentials {
