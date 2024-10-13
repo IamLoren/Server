@@ -7,6 +7,8 @@ import {
     currentReq,
     currentRes,
     IUserCredentials,
+    LogoutReq,
+    LogoutRes,
     RegisterReq,
     RegisterRes,
     signInReq,
@@ -128,10 +130,10 @@ const getCurrent = async (req, res: currentRes, next: NextFunction) => {
     }
 }
 
-const logout = async (req: Request, res: Response, next: NextFunction) => {
+const logout = async (req: LogoutReq, res: LogoutRes, next: NextFunction) => {
     try {
-        const { _id } = req.body.user
-        await authServices.setToken(_id)
+        const id = req.user.jwtPayload
+        await authServices.setToken(id)
         res.status(204).end()
     } catch (error) {
         next(error)

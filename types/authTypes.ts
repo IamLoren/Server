@@ -63,8 +63,7 @@ export interface signInRes extends Response {
 }
 
 export interface currentReq extends Request {
-    body: {
-        
+    body: {      
     }
 }
 
@@ -82,4 +81,14 @@ export interface currentRes extends Response {
         favorites: string[]
         history: string[]
     }) => this
+}
+
+export interface LogoutReq extends Request {
+    user: {
+        jwtPayload: ObjectId
+    }
+}
+
+export interface LogoutRes extends Response {
+    status: (statusCode: number) => this
 }
