@@ -71,7 +71,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
         }
 
         const { JWT_SECRET } = process.env
-        const jwtPayload = foundedUser.id
+        const jwtPayload = foundedUser._id
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         const userProfile = await UserProfile.findOne({
@@ -81,9 +81,11 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
             res.json({
                 token,
                 user: {
+                    id: foundedUser._id.toString(),
                     email: foundedUser.email,
                     firstName: foundedUser.firstName,
                     lastName: foundedUser.lastName,
+                    role: foundedUser.role,
                     theme: userProfile.theme,
                     avatarURL: userProfile.avatarURL,
                 },
@@ -97,33 +99,30 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
 const getCurrent = async (req, res: currentRes, next: NextFunction) => {
     try {
         const id = req.user.jwtPayload
-        const { JWT_SECRET } = process.env
-        const jwtPayload = id
-        const updatedToken = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
-        const user = await UserCredentials.findByIdAndUpdate(
-            id,
-            { token: updatedToken },
-            { new: true }
-        )
+
+        const user = await UserCredentials.findOne({ _id: id })
+
         if (user) {
-            const { _id, firstName, lastName, role, email} = user;
-        const userProfile = await UserProfile.findOne({
-            userId: _id,
-        })
-        if(userProfile) {
-            res.status(200).json({
-                id: _id.toString(),
-                firstName,
-                lastName,
-                email,
-                avatarURL: userProfile.avatarURL,
-                theme: userProfile.theme,
-                role,
-                token:updatedToken,
-        })
+            const { _id, firstName, lastName, role, email, token } = user
+
+            const userProfile = await UserProfile.findOne({
+                userId: _id,
+            })
+           
+            if (userProfile)
+                res.status(200).json({
+                    id: _id.toString(),
+                    firstName,
+                    lastName,
+                    email,
+                    avatarURL: userProfile.avatarURL,
+                    theme: userProfile.theme,
+                    favorites: userProfile.favorites,
+                    history: userProfile.history,
+                    role,
+                    token,
+                })
         }
-        }
-        
     } catch (error) {
         next(error)
     }
