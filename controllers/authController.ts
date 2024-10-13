@@ -1,11 +1,14 @@
+import { JwtPayload } from 'jsonwebtoken'
 import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { nanoid } from 'nanoid'
 import * as authServices from '../services/authServices.js'
 import {
     currentReq,
     currentRes,
+    IUserCredentials,
+    LogoutReq,
+    LogoutRes,
     RegisterReq,
     RegisterRes,
     signInReq,
@@ -13,6 +16,7 @@ import {
 } from '../types/authTypes.js'
 import HttpError from '../services/HTTPError.js'
 import UserProfile from '../models/UserProfile.js'
+import UserCredentials from '../models/UserCredentials.js'
 
 const register = async (
     req: RegisterReq,
@@ -27,16 +31,15 @@ const register = async (
             throw HttpError(409, 'Email in use')
         }
 
-        const { JWT_SECRET } = process.env
-        const jwtPayload = nanoid()
-        const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
-
-        const newUser = await authServices.signUp({ ...req.body, token })
+        const newUser = await authServices.signUp({ ...req.body })
 
         const newUserProfile = new UserProfile({
             userId: newUser._id,
         })
         await newUserProfile.save()
+        const { JWT_SECRET } = process.env
+        const jwtPayload = newUser._id
+        const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         res.status(201).json({
             token,
@@ -68,48 +71,69 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
         if (!passwordCompare) {
             throw HttpError(401, 'Invalid email or password')
         }
-        console.log(`foundedUser: ${foundedUser}`)
 
         const { JWT_SECRET } = process.env
-        const jwtPayload = nanoid()
+        const jwtPayload = foundedUser._id
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         const userProfile = await UserProfile.findOne({
             userId: foundedUser._id,
         })
-        console.log(`userProfile: ${userProfile}`)
-        res.json({
-            token,
-            user: {
-                email: foundedUser.email,
-                firstName: foundedUser.firstName,
-                lastName: foundedUser.lastName,
-                theme: userProfile?.theme,
-                avatarURL: userProfile?.avatarURL,
-            },
-        })
+        if (userProfile) {
+            res.json({
+                token,
+                user: {
+                    id: foundedUser._id.toString(),
+                    email: foundedUser.email,
+                    firstName: foundedUser.firstName,
+                    lastName: foundedUser.lastName,
+                    role: foundedUser.role,
+                    theme: userProfile.theme,
+                    avatarURL: userProfile.avatarURL,
+                },
+            })
+        }
     } catch (error) {
         next(error)
     }
 }
 
-const getCurrent = async (
-    req: currentReq,
-    res: currentRes,
-    next: NextFunction
-) => {
+const getCurrent = async (req, res: currentRes, next: NextFunction) => {
     try {
-        const { email, avatarURL, theme } = req.body.user
-        res.status(200).json({ email, avatarURL, theme })
+        const id = req.user.jwtPayload
+
+        const user = await UserCredentials.findOne({ _id: id })
+
+        if (user) {
+            const { _id, firstName, lastName, role, email, token } = user
+
+            const userProfile = await UserProfile.findOne({
+                userId: _id,
+            })
+           
+            if (userProfile)
+                res.status(200).json({
+                    id: _id.toString(),
+                    firstName,
+                    lastName,
+                    email,
+                    avatarURL: userProfile.avatarURL,
+                    theme: userProfile.theme,
+                    favorites: userProfile.favorites,
+                    history: userProfile.history,
+                    role,
+                    token,
+                })
+        }
     } catch (error) {
         next(error)
     }
 }
 
-const logout = async (req: Request, res: Response, next: NextFunction) => {
+const logout = async (req: LogoutReq, res: LogoutRes, next: NextFunction) => {
     try {
-        const { _id } = req.body.user
-        await authServices.setToken(_id)
+        const id = req.user.jwtPayload
+        await authServices.setToken(id)
         res.status(204).end()
     } catch (error) {
         next(error)
