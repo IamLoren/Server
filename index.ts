@@ -29,7 +29,7 @@ if (!DB_HOST) {
 
 mongoose.connect(DB_HOST)
 .then(()=> {
-    app.listen(2800, () => console.log('Server is runing!'));
+    app.listen(PORT, () => console.log('Server is runing!'));
 })
 .catch(error => {
     console.log(error.message)
