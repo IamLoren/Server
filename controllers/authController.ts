@@ -1,11 +1,12 @@
+import { JwtPayload } from 'jsonwebtoken'
 import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { nanoid } from 'nanoid'
 import * as authServices from '../services/authServices.js'
 import {
     currentReq,
     currentRes,
+    IUserCredentials,
     RegisterReq,
     RegisterRes,
     signInReq,
@@ -13,6 +14,7 @@ import {
 } from '../types/authTypes.js'
 import HttpError from '../services/HTTPError.js'
 import UserProfile from '../models/UserProfile.js'
+import UserCredentials from '../models/UserCredentials.js'
 
 const register = async (
     req: RegisterReq,
@@ -27,16 +29,15 @@ const register = async (
             throw HttpError(409, 'Email in use')
         }
 
-        const { JWT_SECRET } = process.env
-        const jwtPayload = nanoid()
-        const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
-
-        const newUser = await authServices.signUp({ ...req.body, token })
+        const newUser = await authServices.signUp({ ...req.body })
 
         const newUserProfile = new UserProfile({
             userId: newUser._id,
         })
         await newUserProfile.save()
+        const { JWT_SECRET } = process.env
+        const jwtPayload = newUser._id
+        const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         res.status(201).json({
             token,
@@ -68,10 +69,9 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
         if (!passwordCompare) {
             throw HttpError(401, 'Invalid email or password')
         }
-        console.log(`foundedUser: ${foundedUser}`)
 
         const { JWT_SECRET } = process.env
-        const jwtPayload = nanoid()
+        const jwtPayload = foundedUser.id
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         const userProfile = await UserProfile.findOne({
@@ -94,27 +94,36 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
     }
 }
 
-const getCurrent = async (
-    req: currentReq,
-    res: currentRes,
-    next: NextFunction
-) => {
+const getCurrent = async (req, res: currentRes, next: NextFunction) => {
     try {
-        const { id, firstName, lastName, role, email, avatarURL, theme } = req.body.user;
+        const id = req.user.jwtPayload
+        const { JWT_SECRET } = process.env
+        const jwtPayload = id
+        const updatedToken = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
+        const user = await UserCredentials.findByIdAndUpdate(
+            id,
+            { token: updatedToken },
+            { new: true }
+        )
+        if (user) {
+            const { _id, firstName, lastName, role, email} = user;
         const userProfile = await UserProfile.findOne({
-            userId: id,
+            userId: _id,
         })
         if(userProfile) {
             res.status(200).json({
-                id,
+                id: _id.toString(),
                 firstName,
                 lastName,
                 email,
                 avatarURL: userProfile.avatarURL,
                 theme: userProfile.theme,
                 role,
+                token:updatedToken,
         })
         }
+        }
+        
     } catch (error) {
         next(error)
     }

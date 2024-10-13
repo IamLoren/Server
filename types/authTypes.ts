@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Types } from 'mongoose'
+import { ObjectId, Types } from 'mongoose'
 const id: Types.ObjectId = new Types.ObjectId()
 
 export interface signUpArguments {
@@ -13,6 +13,7 @@ export interface signUpArguments {
 }
 
 export interface IUserCredentials {
+    _id: ObjectId
     firstName: string
     lastName: string
     password: string
@@ -61,28 +62,20 @@ export interface signInRes extends Response {
 
 export interface currentReq extends Request {
     body: {
-        token: string | null
-        user: {
-            id: Types.ObjectId
-            firstName: string
-            lastName: string
-            email: string
-            avatarURL: string
-            theme: 'light' | 'dark'
-            role: 'admin' | 'user'
-        }
+        
     }
 }
 
 export interface currentRes extends Response {
     status: (statusCode: number) => this
     json: (body: {
-        id: Types.ObjectId
+        id: string
         firstName: string
         lastName: string
         email: string
         avatarURL: string
         theme: 'light' | 'dark'
         role: 'admin' | 'user'
+        token: string
     }) => this
 }
