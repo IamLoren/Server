@@ -54,22 +54,35 @@ export interface signInRes extends Response {
             lastName: string
             email: string
             avatarURL: string | undefined
-            theme: string | undefined
+            theme: 'light' | 'dark'
         }
     }) => this
 }
 
 export interface currentReq extends Request {
     body: {
+        token: string | null
         user: {
+            id: Types.ObjectId
+            firstName: string
+            lastName: string
             email: string
             avatarURL: string
-            theme: string
+            theme: 'light' | 'dark'
+            role: 'admin' | 'user'
         }
     }
 }
 
 export interface currentRes extends Response {
     status: (statusCode: number) => this
-    json: (body: { email: string; avatarURL: string; theme: string }) => this
+    json: (body: {
+        id: Types.ObjectId
+        firstName: string
+        lastName: string
+        email: string
+        avatarURL: string
+        theme: 'light' | 'dark'
+        role: 'admin' | 'user'
+    }) => this
 }

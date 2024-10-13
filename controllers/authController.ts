@@ -77,17 +77,18 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
         const userProfile = await UserProfile.findOne({
             userId: foundedUser._id,
         })
-        console.log(`userProfile: ${userProfile}`)
-        res.json({
-            token,
-            user: {
-                email: foundedUser.email,
-                firstName: foundedUser.firstName,
-                lastName: foundedUser.lastName,
-                theme: userProfile?.theme,
-                avatarURL: userProfile?.avatarURL,
-            },
-        })
+        if (userProfile) {
+            res.json({
+                token,
+                user: {
+                    email: foundedUser.email,
+                    firstName: foundedUser.firstName,
+                    lastName: foundedUser.lastName,
+                    theme: userProfile.theme,
+                    avatarURL: userProfile.avatarURL,
+                },
+            })
+        }
     } catch (error) {
         next(error)
     }
@@ -99,8 +100,21 @@ const getCurrent = async (
     next: NextFunction
 ) => {
     try {
-        const { email, avatarURL, theme } = req.body.user
-        res.status(200).json({ email, avatarURL, theme })
+        const { id, firstName, lastName, role, email, avatarURL, theme } = req.body.user;
+        const userProfile = await UserProfile.findOne({
+            userId: id,
+        })
+        if(userProfile) {
+            res.status(200).json({
+                id,
+                firstName,
+                lastName,
+                email,
+                avatarURL: userProfile.avatarURL,
+                theme: userProfile.theme,
+                role,
+        })
+        }
     } catch (error) {
         next(error)
     }
