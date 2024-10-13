@@ -51,18 +51,19 @@ export interface signInRes extends Response {
     json: (body: {
         token: string
         user: {
+            id: string
             firstName: string
             lastName: string
             email: string
             avatarURL: string | undefined
             theme: 'light' | 'dark'
+            role: "user" | "admin"
         }
     }) => this
 }
 
 export interface currentReq extends Request {
-    body: {
-        
+    body: {      
     }
 }
 
@@ -77,5 +78,17 @@ export interface currentRes extends Response {
         theme: 'light' | 'dark'
         role: 'admin' | 'user'
         token: string
+        favorites: string[]
+        history: string[]
     }) => this
+}
+
+export interface LogoutReq extends Request {
+    user: {
+        jwtPayload: ObjectId
+    }
+}
+
+export interface LogoutRes extends Response {
+    status: (statusCode: number) => this
 }

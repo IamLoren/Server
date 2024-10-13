@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { Types } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import {IUserCredentials, signUpArguments} from "../types/authTypes"
 import { FilterQuery } from "mongoose";
 import UserCredentials from "../models/UserCredentials.js";
@@ -18,7 +18,7 @@ export const findUser = (filter:FilterQuery<IUserCredentials>) => {
     return UserCredentials.findById(id);
   };
 
-  export const setToken = async (id: Types.ObjectId) => {
+  export const setToken = async (id: ObjectId) => {
     const token = ""; 
     const result = await UserCredentials.findByIdAndUpdate(id, { token });
     if (!result) {
