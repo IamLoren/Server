@@ -6,7 +6,6 @@ import * as authServices from '../services/authServices.js'
 import {
     currentReq,
     currentRes,
-    IUserCredentials,
     LogoutReq,
     LogoutRes,
     RegisterReq,
