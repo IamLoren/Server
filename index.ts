@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRouter from './routes/authRouter.js';
+import carsRouter from './routes/carsRouter.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 
+app.use("/api/cars", carsRouter);
 
 
 
