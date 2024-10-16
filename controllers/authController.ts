@@ -89,6 +89,8 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
                     role: foundedUser.role,
                     theme: userProfile.theme,
                     avatarURL: userProfile.avatarURL,
+                    favorites: userProfile.favorites,
+                    history:userProfile.history,
                 },
             })
         }

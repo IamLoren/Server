@@ -56,6 +56,8 @@ export interface signInRes extends Response {
             lastName: string
             email: string
             avatarURL: string | undefined
+            favorites: {}[]
+            history: {}[]
             theme: 'light' | 'dark'
             role: "user" | "admin"
         }
