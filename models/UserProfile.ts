@@ -10,10 +10,10 @@ const userProfileSchema = new Schema({
         default: null,
     },
     favorites: {
-        type: [String],
+        type: Array,
     },
     history: {
-        type: [String],
+        type: Array,
     },
     theme: {
         type: String,

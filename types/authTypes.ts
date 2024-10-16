@@ -78,8 +78,8 @@ export interface currentRes extends Response {
         theme: 'light' | 'dark'
         role: 'admin' | 'user'
         token: string
-        favorites: string[]
-        history: string[]
+        favorites: {}[]
+        history: {}[]
     }) => this
 }
 
