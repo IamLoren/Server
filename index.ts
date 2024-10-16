@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRouter from './routes/authRouter.js';
 import carsRouter from './routes/carsRouter.js';
+import userRouter from './routes/userRouter.js';
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ app.use(corsMiddleware);
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+
+app. use("/api/user", userRouter);
 
 app.use("/api/cars", carsRouter);
 

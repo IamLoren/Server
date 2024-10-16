@@ -106,23 +106,26 @@ const getCurrent = async (req, res: currentRes, next: NextFunction) => {
         if (user) {
             const { _id, firstName, lastName, role, email, token } = user
 
-            const userProfile = await UserProfile.findOne({
+            const foundedUserProfile = await UserProfile.findOne({
                 userId: _id,
             })
-           
-            if (userProfile)
+
+            if (foundedUserProfile) {
+                const { avatarURL, theme, favorites, history } =
+                    foundedUserProfile
                 res.status(200).json({
                     id: _id.toString(),
                     firstName,
                     lastName,
                     email,
-                    avatarURL: userProfile.avatarURL,
-                    theme: userProfile.theme,
-                    favorites: userProfile.favorites,
-                    history: userProfile.history,
+                    avatarURL,
+                    theme,
+                    favorites,
+                    history,
                     role,
                     token,
                 })
+            }
         }
     } catch (error) {
         next(error)
