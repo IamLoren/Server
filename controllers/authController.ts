@@ -27,7 +27,7 @@ const register = async (
 
         const user = await authServices.findUser({ email })
         if (user) {
-            throw HttpError(409, 'Email in use')
+                                                                                                                                
         }
 
         const newUser = await authServices.signUp({ ...req.body })

@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import Car from "./Car";
 
 const userProfileSchema = new Schema({
     userId: {
@@ -10,7 +11,7 @@ const userProfileSchema = new Schema({
         default: null,
     },
     favorites: {
-        type: Array,
+        type: [Car.schema],
     },
     history: {
         type: Array,
