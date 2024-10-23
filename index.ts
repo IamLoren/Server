@@ -20,8 +20,6 @@ app. use("/api/user", userRouter);
 
 app.use("/api/cars", carsRouter);
 
-
-
 app.use((_, res) => {
     res.status(404).json({message: "Not found"})
 })
