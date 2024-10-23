@@ -2,10 +2,22 @@ import { Request, Response, NextFunction } from 'express'
 import UserCredentials from '../models/UserCredentials'
 import UserProfile from '../models/UserProfile'
 import mongoose from 'mongoose'
+import { boolean } from 'joi'
+
+interface ReqInt extends Request {
+    user: {jwtPayload: string}
+}
+interface ResInt extends Response {
+    status: (code: number) => this;
+    json: (body: {
+        message?: string;  
+        arrFavorite?: any[]; 
+    }) => this; 
+}
 
 const updateFavorites = async (
-    req: Request,
-    res: Response,
+    req: ReqInt,
+    res: ResInt,
     next: NextFunction
 ) => {
     try {
@@ -24,15 +36,17 @@ const updateFavorites = async (
         )
 
         if (carExists) {
-            const { favorites } = await UserProfile.findOneAndUpdate(
+            const updatedProfile  = await UserProfile.findOneAndUpdate(
                 { userId: objectId },
                 { $pull: { favorites: { _id: carId } } },
                 { new: true }
             )
-            res.status(200).json({
-                message: 'Car removed from favorites',
-                arrFavorite:favorites,
-            })
+            if (updatedProfile) {
+                res.status(200).json({
+                    message: 'Car removed from favorites',
+                    arrFavorite: updatedProfile.favorites,
+                });
+            }
         } else {
             const newFavorite = await UserProfile.findOneAndUpdate(
                 { userId: objectId },
@@ -41,10 +55,14 @@ const updateFavorites = async (
             )
             if(newFavorite) {
                 const arrFavorite =  newFavorite.favorites; 
-            res.status(200).json({arrFavorite})
+            res.status(200).json({
+                message: 'Car added to favorites',
+                arrFavorite})
             }
         }
-    } catch (error) {}
+    } catch (error) {
+        next(error);
+    }
 }
 
 export default {
