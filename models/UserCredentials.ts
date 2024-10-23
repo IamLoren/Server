@@ -41,6 +41,7 @@ const userCredentialsSchema = new Schema(
         terms: {
             type: Boolean,
             default: null,
+            required: [true, 'terms and conditions must be accepted'],
         }
     },
     { versionKey: false, timestamps: true }
