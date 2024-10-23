@@ -11,7 +11,7 @@ const userProfileSchema = new Schema({
         default: null,
     },
     favorites: {
-        type: [Car.schema],
+        type: Array,
     },
     history: {
         type: Array,
