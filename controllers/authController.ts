@@ -66,27 +66,38 @@ const register = async (
 
 const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
     try {
-        const { email, password } = req.body
+        const { email, password } = req.body;
+        if (!email || !password) {
+            throw new Error('Email and password  are required');
+        }
 
         const foundedUser = await authServices.findUser({ email })
         if (!foundedUser) {
-            throw HttpError(401, 'Invalid email or password')
+            throw new Error ('This user was not registered in Data Base')
         }
+
         const passwordCompare = await bcrypt.compare(
             password,
             foundedUser.password
         )
         if (!passwordCompare) {
-            throw HttpError(401, 'Invalid email or password')
+            throw new Error('Invalid email or password')
         }
 
-        const { JWT_SECRET } = process.env
+        const { JWT_SECRET } = process.env;
+        if(!JWT_SECRET) {
+            throw new Error("JWT_SECRET variable is not available")
+        }
         const jwtPayload = foundedUser._id
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         const userProfile = await UserProfile.findOne({
             userId: foundedUser._id,
         })
+        if(!userProfile) {
+            throw new Error("User profile was not founded")
+        }
+
         if (userProfile) {
             res.json({
                 token,
