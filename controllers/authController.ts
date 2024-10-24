@@ -1,8 +1,7 @@
-import { JwtPayload } from 'jsonwebtoken'
 import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import * as authServices from '../services/authServices.js'
+import * as authServices from '../services/authServices'
 import {
     currentReq,
     currentRes,
@@ -12,10 +11,10 @@ import {
     RegisterRes,
     signInReq,
     signInRes,
-} from '../types/authTypes.js'
-import HttpError from '../services/HTTPError.js'
-import UserProfile from '../models/UserProfile.js'
-import UserCredentials from '../models/UserCredentials.js'
+} from '../types/authTypes'
+import HttpError from '../services/HTTPError'
+import UserProfile from '../models/UserProfile'
+import UserCredentials from '../models/UserCredentials'
 
 const register = async (
     req: RegisterReq,
@@ -23,21 +22,31 @@ const register = async (
     next: NextFunction
 ) => {
     try {
-        const { email } = req.body
+        const { email, password, firstName, lastName } = req.body;
+        if (!email || !password || !firstName || !lastName) {
+            throw new Error('Email, password, firstName and lastName are required');
+        }
 
         const user = await authServices.findUser({ email })
         if (user) {
-                                                                                                                                
+            throw HttpError(409, "Email in use");                                                                                                                
         }
 
         const newUser = await authServices.signUp({ ...req.body })
+        if(!newUser) {
+            throw new Error('Registration error');
+        }
 
         const newUserProfile = new UserProfile({
             userId: newUser._id,
         })
         await newUserProfile.save()
-        const { JWT_SECRET } = process.env
-        const jwtPayload = newUser._id
+
+        const { JWT_SECRET } = process.env;
+        if(!JWT_SECRET) {
+            throw new Error("JWT_SECRET variable is not available")
+        }
+        const jwtPayload = newUser._id;
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         res.status(201).json({
