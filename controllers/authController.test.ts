@@ -2,6 +2,7 @@ import authController from './authController'
 import { findUser, signUp } from '../services/authServices'
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import HttpError from '../services/HTTPError'
 import UserProfile from '../models/UserProfile'
 import UserCredentials from '../models/UserCredentials';
@@ -11,7 +12,9 @@ const {JWT_SECRET} = process.env;
 
 jest.mock('../services/authServices')
 jest.mock('../models/UserProfile')
+jest.mock('../models/UserCredentials')
 jest.mock('jsonwebtoken')
+jest.mock('bcrypt')
 jest.mock('../services/HTTPError')
 jest.mock('../services/authServices', () => ({
     signUp: jest.fn(),
@@ -240,6 +243,138 @@ describe('registerfunction', () => {
         delete process.env.JWT_SECRET;
 
         await authController.register(req as any, res as any, next as any)
+
+        expect(next).toHaveBeenCalled();
+        expect(next.mock.calls[0][0].message).toBe('JWT_SECRET variable is not available');
+
+        process.env.JWT_SECRET = originalJwtSecret;
+    })
+})
+
+describe("loginfunction", () => {
+    test('should login user with valid data', async () => {
+        const req = {
+            body: {
+                email: 'test@example.com',
+                password: '12345678',
+            },
+        }
+        const res = {json: jest.fn() }
+        const next = jest.fn()
+
+        const mockUser = {
+            _id: 'userId123',
+            email: 'test@example.com',
+            password: 'hashedPassword',
+            firstName: 'John',
+            lastName: 'Doe',
+            role: 'user',
+        }
+        const mockProfile = {
+            userId: 'userId123',
+            theme: 'light',
+            avatarURL: 'avatar.jpg',
+            favorites: [],
+            history: [],
+        };
+
+        (findUser as jest.Mock).mockResolvedValue(mockUser);
+        (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+        (UserProfile.findOne as jest.Mock).mockResolvedValue(mockProfile);
+        (jwt.sign as jest.Mock).mockReturnValue('mockToken123');
+
+        await authController.login(req as any, res as any, next as any);
+
+        expect(res.json).toHaveBeenCalledWith({
+            token: 'mockToken123',
+            user: {
+                id: 'userId123',
+                email: 'test@example.com',
+                firstName: 'John',
+                lastName: 'Doe',
+                role: 'user',
+                theme: 'light',
+                avatarURL: 'avatar.jpg',
+                favorites: [],
+                history: [],
+            },
+        })
+    })
+
+    test('should generate error when user was not founded', async () => {
+        const req = {
+            body: {
+                email: 'test@example.com',
+                password: '12345678',
+            },
+        }
+        const res = {json: jest.fn() }
+        const next = jest.fn();
+
+        (findUser as jest.Mock).mockResolvedValue(null); 
+
+        await authController.login(req as any, res as any, next as any);
+
+        expect(next).toHaveBeenCalled()
+        expect(next.mock.calls[0][0].message).toBe('This user was not registered in Data Base')
+    })
+
+    test('should generate error when password is not valid', async () => {
+        const req = {
+            body: {
+                email: 'test@example.com',
+                password: '12345678',
+            },
+        }
+        const res = {json: jest.fn() }
+        const next = jest.fn();
+
+        const mockUser = {
+            _id: 'userId123',
+            email: 'test@example.com',
+            password: 'hashedPassword',
+            firstName: 'John',
+            lastName: 'Doe',
+            role: 'user',
+        };
+
+        (findUser as jest.Mock).mockResolvedValue(mockUser); 
+        (bcrypt.compare as jest.Mock).mockRejectedValue(new Error('Invalid email or password'))
+
+        await authController.login(req as any, res as any, next as any);
+
+        expect(next).toHaveBeenCalled()
+        expect(next.mock.calls[0][0].message).toBe('Invalid email or password')
+    })
+
+    test('should generate error if JWT_SECRET variable is not available', async () => {
+        const req = {
+            body: {
+                email: 'test@example.com',
+                password: '12345678',
+            },
+        }
+        const res = {json: jest.fn() }
+        const next = jest.fn();
+
+        const mockUser = {
+            _id: 'userId123',
+            email: 'test@example.com',
+            password: 'hashedPassword',
+            firstName: 'John',
+            lastName: 'Doe',
+            role: 'user',
+        };
+
+        (findUser as jest.Mock).mockResolvedValue(mockUser); 
+        (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+
+        const jwtSignSpy = jest.spyOn(jwt, 'sign').mockReturnValue('mockToken123');
+
+        const originalJwtSecret = process.env.JWT_SECRET;
+        delete process.env.JWT_SECRET;
+
+        await authController.login(req as any, res as any, next as any)
 
         expect(next).toHaveBeenCalled();
         expect(next.mock.calls[0][0].message).toBe('JWT_SECRET variable is not available');
