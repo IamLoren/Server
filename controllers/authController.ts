@@ -22,19 +22,21 @@ const register = async (
     next: NextFunction
 ) => {
     try {
-        const { email, password, firstName, lastName } = req.body;
+        const { email, password, firstName, lastName } = req.body
         if (!email || !password || !firstName || !lastName) {
-            throw new Error('Email, password, firstName and lastName are required');
+            throw new Error(
+                'Email, password, firstName and lastName are required'
+            )
         }
 
         const user = await authServices.findUser({ email })
         if (user) {
-            throw HttpError(409, "Email in use");                                                                                                                
+            throw HttpError(409, 'Email in use')
         }
 
         const newUser = await authServices.signUp({ ...req.body })
-        if(!newUser) {
-            throw new Error('Registration error');
+        if (!newUser) {
+            throw new Error('Registration error')
         }
 
         const newUserProfile = new UserProfile({
@@ -42,11 +44,11 @@ const register = async (
         })
         await newUserProfile.save()
 
-        const { JWT_SECRET } = process.env;
-        if(!JWT_SECRET) {
-            throw new Error("JWT_SECRET variable is not available")
+        const { JWT_SECRET } = process.env
+        if (!JWT_SECRET) {
+            throw new Error('JWT_SECRET variable is not available')
         }
-        const jwtPayload = newUser._id;
+        const jwtPayload = newUser._id
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
 
         res.status(201).json({
@@ -66,14 +68,14 @@ const register = async (
 
 const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
     try {
-        const { email, password } = req.body;
+        const { email, password } = req.body
         if (!email || !password) {
-            throw new Error('Email and password  are required');
+            throw new Error('Email and password  are required')
         }
 
         const foundedUser = await authServices.findUser({ email })
         if (!foundedUser) {
-            throw new Error ('This user was not registered in Data Base')
+            throw new Error('This user was not registered in Data Base')
         }
 
         const passwordCompare = await bcrypt.compare(
@@ -84,9 +86,9 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
             throw new Error('Invalid email or password')
         }
 
-        const { JWT_SECRET } = process.env;
-        if(!JWT_SECRET) {
-            throw new Error("JWT_SECRET variable is not available")
+        const { JWT_SECRET } = process.env
+        if (!JWT_SECRET) {
+            throw new Error('JWT_SECRET variable is not available')
         }
         const jwtPayload = foundedUser._id
         const token = jwt.sign({ jwtPayload }, JWT_SECRET, { expiresIn: '12h' })
@@ -94,8 +96,8 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
         const userProfile = await UserProfile.findOne({
             userId: foundedUser._id,
         })
-        if(!userProfile) {
-            throw new Error("User profile was not founded")
+        if (!userProfile) {
+            throw new Error('User profile was not founded')
         }
 
         if (userProfile) {
@@ -110,7 +112,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
                     theme: userProfile.theme,
                     avatarURL: userProfile.avatarURL,
                     favorites: userProfile.favorites,
-                    history:userProfile.history,
+                    history: userProfile.history,
                 },
             })
         }
@@ -121,9 +123,21 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
 
 const getCurrent = async (req, res: currentRes, next: NextFunction) => {
     try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
+
         const id = req.user.jwtPayload
 
         const user = await UserCredentials.findOne({ _id: id })
+        if (!user) {
+            throw new Error('User with such id was not fouded')
+        }
 
         if (user) {
             const { _id, firstName, lastName, role, email, token } = user
@@ -131,6 +145,9 @@ const getCurrent = async (req, res: currentRes, next: NextFunction) => {
             const foundedUserProfile = await UserProfile.findOne({
                 userId: _id,
             })
+            if (!foundedUserProfile) {
+                throw new Error('User profile was not founded')
+            }
 
             if (foundedUserProfile) {
                 const { avatarURL, theme, favorites, history } =
@@ -156,6 +173,15 @@ const getCurrent = async (req, res: currentRes, next: NextFunction) => {
 
 const logout = async (req: LogoutReq, res: LogoutRes, next: NextFunction) => {
     try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
+
         const id = req.user.jwtPayload
         await authServices.setToken(id)
         res.status(204).end()
