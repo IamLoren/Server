@@ -5,12 +5,14 @@ import mongoose from 'mongoose'
 import { boolean } from 'joi'
 
 interface ReqInt extends Request {
-    user: {jwtPayload: string}
+    user: {jwtPayload: string};
+    body: {_id: string}
 }
 interface ResInt extends Response {
     status: (code: number) => this;
     json: (body: {
         message?: string;  
+
         arrFavorite?: any[]; 
     }) => this; 
 }
@@ -21,9 +23,21 @@ const updateFavorites = async (
     next: NextFunction
 ) => {
     try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
         const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId);
-        const carId = req.body._id
+        const carId = req.body._id 
+        if(!carId) {
+            throw new Error("Request body doesnt have car data to add to favorites")
+        }
+
         const car = req.body
         const profile = await UserProfile.findOne({ userId: objectId })
 
@@ -34,7 +48,7 @@ const updateFavorites = async (
         const carExists = profile.favorites.some(
             (favoriteCar) => favoriteCar._id === carId
         )
-
+   
         if (carExists) {
             const updatedProfile  = await UserProfile.findOneAndUpdate(
                 { userId: objectId },
@@ -47,7 +61,7 @@ const updateFavorites = async (
                     arrFavorite: updatedProfile.favorites,
                 });
             }
-        } else {
+        } else if(!carExists) {
             const newFavorite = await UserProfile.findOneAndUpdate(
                 { userId: objectId },
                 { $push: { favorites: car } },
