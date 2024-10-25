@@ -7,6 +7,9 @@ jest.mock('../models/Car', () => ({
 }))
 
 describe('getAllCars function', () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
     test('should get cars list without request data', async () => {
         const req = {}
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() }

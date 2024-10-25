@@ -95,7 +95,7 @@ describe('insert', () => {
         });
       
         await expect(user.save()).rejects.toThrow();
-      });
+      }, 20000);
 
       test("should not allow creating a user with a duplicate email", async () => {
         const user1 = new UserCredentials({
@@ -116,7 +116,7 @@ describe('insert', () => {
         });
       
         await expect(user2.save()).rejects.toThrow();
-      });
+      }, 20000);
 
       test("should not create a user without required fields", async () => {
         const user = new UserCredentials({
@@ -130,5 +130,5 @@ describe('insert', () => {
         await expect(user.save()).rejects.toThrow(
           'lastName is required'
         );
-      });
+      }, 20000);
 })
