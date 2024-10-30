@@ -99,7 +99,7 @@ const deleteUserController = async (req, res, next) => {
         await UserProfile.deleteOne({ userId: objectId });
         return res.status(200).json({ message: 'User and profile deleted successfully' });
     } catch (error) {
-        next();
+        next(error);
         return res.status(500).json({ message: 'Error deleting user and profile', error });
     }
 }

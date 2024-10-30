@@ -1,9 +1,11 @@
 import mongoose from 'mongoose'
 import UserProfile from '../models/UserProfile'
+import UserCredentials from '../models/UserCredentials'
 import userControllers from './userControllers'
 import { Request, Response, NextFunction } from 'express'
 
-jest.mock('../models/UserProfile')
+jest.mock('../models/UserProfile');
+jest.mock('../models/UserCredentials');
 
 describe('updateFavorites function', () => {
     afterEach(() => {
@@ -244,3 +246,72 @@ describe('updateFavorites function', () => {
         });
     });
 })
+
+describe('deleteUserController', () => {
+    let req, res, next;
+  
+    beforeEach(() => {
+      req = {};
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      next = jest.fn();
+    });
+  
+    it('should return status 500 and error if req doesnt have property user', async () => {
+      await userControllers.deleteUserController(req, res, next);
+  
+      expect(next).toHaveBeenCalledWith(new Error('Request doesnt have necessary property `user` '));
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Error deleting user and profile',
+        error: expect.any(Error),
+      });
+    });
+  
+    it('should return status 500 and error if req.user doesnt have jwtPayload', async () => {
+      req.user = {};
+  
+      await userControllers.deleteUserController(req, res, next);
+  
+      expect(next).toHaveBeenCalledWith(new Error('Request doesnt have necessary property `user.jwtPayload` '));
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Error deleting user and profile',
+        error: expect.any(Error),
+      });
+    });
+  
+    it('deleted user and profile succesfully if req.user.jwtPayload exists', async () => {
+      const userId = new mongoose.Types.ObjectId().toString();
+      req.user = { jwtPayload: userId };
+  
+      (UserCredentials.deleteOne as jest.Mock).mockResolvedValue({ deletedCount: 1 });
+      (UserProfile.deleteOne as jest.Mock).mockResolvedValue({ deletedCount: 1 });
+  
+      await userControllers.deleteUserController(req, res, next);
+  
+      expect(UserCredentials.deleteOne).toHaveBeenCalledWith({ _id: new mongoose.Types.ObjectId(userId) });
+      expect(UserProfile.deleteOne).toHaveBeenCalledWith({ userId: new mongoose.Types.ObjectId(userId) });
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'User and profile deleted successfully',
+      });
+    });
+  
+    it('should return error if the error of deleting exists', async () => {
+      const userId = new mongoose.Types.ObjectId().toString();
+      req.user = { jwtPayload: userId };
+  
+      (UserCredentials.deleteOne as jest.Mock).mockRejectedValue(new Error('DB error'));
+      await userControllers.deleteUserController(req, res, next);
+  
+      expect(next).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Error deleting user and profile',
+        error: expect.any(Error),
+      });
+    });
+  });
