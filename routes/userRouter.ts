@@ -8,4 +8,6 @@ userRouter.use(authenticate);
 
 userRouter.put("/updatefavorites", userControllers.updateFavorites);
 
+userRouter.delete("/:userId", userControllers.deleteUserController);
+
 export default userRouter;
