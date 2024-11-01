@@ -10,9 +10,20 @@ const ordersSchema = new Schema({
         type: String,
         required: [true, "carId is required"]
     },
+    
     clientId: {
         type: String,
         required: [true, "clientId is required"]
+    },
+    clientEmail: {
+        type: String,
+        required: [true, "userEmail is required"],
+        match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+    },
+    phoneNumber: {
+        type: String,
+        required: [true, "phoneNumber is required"],
+        match: /^\+1\s\d{3}\s\d{3}\s\d{4}$/,
     },
     orderType: {
         type: String,
