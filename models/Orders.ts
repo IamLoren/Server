@@ -10,7 +10,7 @@ const ordersSchema = new Schema({
         type: String,
         required: [true, "carId is required"]
     },
-    
+
     clientId: {
         type: String,
         required: [true, "clientId is required"]
@@ -42,7 +42,7 @@ const ordersSchema = new Schema({
         type: Boolean,
         default: false
     },
-    status: {
+    orderStatus: {
         type: String,
         enum: ["active", "inProgress", "completed"],
         default: "active",

@@ -8,6 +8,8 @@ const ordersRouter = express.Router();
 
 ordersRouter.use(authenticate);
 
+ordersRouter.get("/", orderControllers.getAllOrders);
+
 ordersRouter.post("/create", validateBody(createOrderSchema), orderControllers.createOrder);
 
 export default ordersRouter;
