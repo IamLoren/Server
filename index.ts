@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRouter from './routes/authRouter.js';
 import carsRouter from './routes/carsRouter.js';
 import userRouter from './routes/userRouter.js';
+import ordersRouter from './routes/ordersRouter.js';
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use("/api/auth", authRouter);
 app. use("/api/user", userRouter);
 
 app.use("/api/cars", carsRouter);
+
+app.use("/api/orders", ordersRouter);
 
 app.use((_, res) => {
     res.status(404).json({message: "Not found"})
