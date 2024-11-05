@@ -17,6 +17,35 @@ interface ResInt extends Response {
     }) => this
 }
 
+const getAllUsers = async (req: ReqInt, res: Response, next: NextFunction) => {
+    try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
+        const userId = req.user.jwtPayload
+        const objectId = new mongoose.Types.ObjectId(userId)
+        const user = await UserCredentials.findOne({ _id: objectId })
+        console.log(user)
+        if (!user) {
+            throw new Error('admin with such id doesnt exist')
+        }
+        if (user.role === 'admin') {
+            const allUsers = await UserCredentials.find()
+            console.log(allUsers)
+            res.status(200).json({
+                allUsers,
+            })
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
 const updateFavorites = async (
     req: ReqInt,
     res: ResInt,
@@ -92,19 +121,24 @@ const deleteUserController = async (req, res, next) => {
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
         }
-        const userId = req.user.jwtPayload;
+        const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId)
 
-        await UserCredentials.deleteOne({ _id: objectId });
-        await UserProfile.deleteOne({ userId: objectId });
-        return res.status(200).json({ message: 'User and profile deleted successfully' });
+        await UserCredentials.deleteOne({ _id: objectId })
+        await UserProfile.deleteOne({ userId: objectId })
+        return res
+            .status(200)
+            .json({ message: 'User and profile deleted successfully' })
     } catch (error) {
-        next(error);
-        return res.status(500).json({ message: 'Error deleting user and profile', error });
+        next(error)
+        return res
+            .status(500)
+            .json({ message: 'Error deleting user and profile', error })
     }
 }
 
 export default {
+    getAllUsers,
     updateFavorites,
     deleteUserController,
 }

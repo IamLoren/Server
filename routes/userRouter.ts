@@ -6,6 +6,8 @@ const userRouter = express.Router();
 
 userRouter.use(authenticate);
 
+userRouter.get("/", userControllers.getAllUsers)
+
 userRouter.put("/updatefavorites", userControllers.updateFavorites);
 
 userRouter.delete("/:userId", userControllers.deleteUserController);
