@@ -30,15 +30,44 @@ const getAllUsers = async (req: ReqInt, res: Response, next: NextFunction) => {
         const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId)
         const user = await UserCredentials.findOne({ _id: objectId })
-        console.log(user)
         if (!user) {
             throw new Error('admin with such id doesnt exist')
         }
         if (user.role === 'admin') {
             const allUsers = await UserCredentials.find()
-            console.log(allUsers)
             res.status(200).json({
                 allUsers,
+            })
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getOneUser = async (req, res, next) =>{
+    const param = req.params.id;
+    console.log(req.params.id)
+    try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
+        const userId = req.user.jwtPayload
+        const objectId = new mongoose.Types.ObjectId(userId)
+        const user = await UserCredentials.findOne({ _id: objectId })
+
+        if (!user) {
+            throw new Error('admin with such id doesnt exist')
+        }
+        if (user.role === 'admin') {
+           
+            const client = await UserCredentials.findById(param);
+            res.status(200).json({
+                client,
             })
         }
     } catch (error) {
@@ -141,4 +170,5 @@ export default {
     getAllUsers,
     updateFavorites,
     deleteUserController,
+    getOneUser
 }
