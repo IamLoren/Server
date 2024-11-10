@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import { boolean } from 'joi'
 
 interface ReqInt extends Request {
-    user: { jwtPayload: string }
+    user?: { jwtPayload: string }
     body: { _id: string }
 }
 interface ResInt extends Response {
@@ -22,7 +22,7 @@ const getAllUsers = async (req: ReqInt, res: Response, next: NextFunction) => {
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
-        if (!req.user.hasOwnProperty('jwtPayload')) {
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
             throw new Error(
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
@@ -84,7 +84,7 @@ const updateFavorites = async (
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
-        if (!req.user.hasOwnProperty('jwtPayload')) {
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
             throw new Error(
                 'Request doesnt have necessary property `user.jwtPayload` '
             )

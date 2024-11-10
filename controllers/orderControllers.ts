@@ -3,79 +3,127 @@ import mongoose from 'mongoose'
 import Orders from '../models/Orders'
 import { CreateOrderResponse } from '../types/ordersTypes'
 import UserCredentials from '../models/UserCredentials'
+import Car from '../models/Car';
+
+interface CustomRequest extends Request {
+    user?: {
+        jwtPayload: string; 
+    };
+}
 
 const createOrder = async (
-    req: Request,
+    req: CustomRequest,
     res: CreateOrderResponse,
     next: NextFunction
 ) => {
     try {
-        const orderData = req.body
-        const convertedTime = {
-            time: {
-                startDate: new Date(orderData.time.startDate).toISOString(),
-                endDate: new Date(orderData.time.endDate).toISOString(),
-            },
-        }
-        const orderDataISODate = { ...orderData, ...convertedTime }
-        const newOrder = await Orders.create(orderDataISODate)
-        res.status(201).json({
-            adminApprove: newOrder.adminApprove,
-            carId: newOrder.carId,
-            clientEmail: newOrder.clientEmail,
-            clientId: newOrder.clientId,
-            cost: newOrder.cost,
-            createdAt: newOrder.createdAt,
-            createdBy: newOrder.createdBy,
-            orderType: newOrder.orderType,
-            phoneNumber: newOrder.phoneNumber,
-            orderStatus: newOrder.orderStatus,
-            time: newOrder.time,
-            updatedAt: newOrder.updatedAt,
-            _id: newOrder._id,
-        })
-    } catch (error) {
-        next(error)
-    }
-}
-
-const getAllOrders = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        const orders = await Orders.find()
-
-        res.status(200).json({
-            orders,
-        })
-    } catch (error) {
-        next(error)
-    }
-}
-
-const updateOrder = async (req: Request, res: Response, next: NextFunction) => {
-    try {
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
-        if (!req.user.hasOwnProperty('jwtPayload')) {
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
             throw new Error(
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
         }
         const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId)
-        const user = await UserCredentials.findOne({ _id: objectId })
-
-        if (!user) {
+        const admin = await UserCredentials.findOne({ _id: objectId })
+        if (!admin) {
             throw new Error('admin with such id doesnt exist')
         }
-        if (user.role === 'admin') {
+
+        if (admin.role === 'admin') {
+            const orderData = req.body
+            const convertedTime = {
+                time: {
+                    startDate: new Date(orderData.time.startDate).toISOString(),
+                    endDate: new Date(orderData.time.endDate).toISOString(),
+                },
+            }
+            const orderDataISODate = { ...orderData, ...convertedTime }
+            const newOrder = await Orders.create(orderDataISODate)
+            res.status(201).json({
+                adminApprove: newOrder.adminApprove,
+                carId: newOrder.carId,
+                clientEmail: newOrder.clientEmail,
+                clientId: newOrder.clientId,
+                cost: newOrder.cost,
+                createdAt: newOrder.createdAt,
+                createdBy: newOrder.createdBy,
+                orderType: newOrder.orderType,
+                phoneNumber: newOrder.phoneNumber,
+                orderStatus: newOrder.orderStatus,
+                time: newOrder.time,
+                updatedAt: newOrder.updatedAt,
+                _id: newOrder._id,
+            })
+        } else {
+            res.status(403)
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getAllOrders = async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
+        const userId = req.user.jwtPayload
+        const objectId = new mongoose.Types.ObjectId(userId)
+        const admin = await UserCredentials.findOne({ _id: objectId })
+        if (!admin) {
+            throw new Error('admin with such id doesnt exist')
+        }
+        if (admin.role !== 'admin') {
+            throw new Error('admin with such id doesnt exist')
+        }
+        if (admin.role === 'admin') {
+            const orders = await Orders.find()
+            res.status(200).json({
+                orders,
+            })
+        } else {
+            res.status(403)
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+const updateOrder = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        if (!req.hasOwnProperty('user')) {
+            throw new Error('Request doesnt have necessary property `user` ')
+        }
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
+            throw new Error(
+                'Request doesnt have necessary property `user.jwtPayload` '
+            )
+        }
+        const userId = req.user.jwtPayload
+        const objectId = new mongoose.Types.ObjectId(userId)
+        const admin = await UserCredentials.findOne({ _id: objectId })
+
+        if (!admin) {
+            throw new Error('admin with such id doesnt exist')
+        }
+        if (admin.role === 'admin') {
             const orderId = req.params.id
             const objectId = new mongoose.Types.ObjectId(orderId)
             const updatedData = req.body
+            console.log(updatedData)
+            const previousOrder = await Orders.findOne({ _id: objectId })
             const updatedOrder = await Orders.findByIdAndUpdate(
                 objectId,
                 updatedData,
@@ -88,18 +136,20 @@ const updateOrder = async (req: Request, res: Response, next: NextFunction) => {
                 return res.status(404).json({ message: 'Order not found' })
             }
             res.status(200).json({ updatedOrder })
+        } else {
+            res.status(403)
         }
     } catch (error) {
         next(error)
     }
 }
 
-const searchOrders = async (req, res, next) => {
+const searchOrders = async (req:CustomRequest, res:Response, next:NextFunction) => {
     try {
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
-        if (!req.user.hasOwnProperty('jwtPayload')) {
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
             throw new Error(
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
@@ -139,30 +189,29 @@ const searchOrders = async (req, res, next) => {
             const endedOrders = await Orders.find({
                 'time.endDate': {
                     $gte: startOfToday.toISOString(),
-                    // $lte: endOfToday.toISOString(),
                 },
                 orderStatus: 'inProgress',
-                clientId: userId
+                clientId: userId,
             })
             const approvedOrders = await Orders.find({
                 clientId: userId,
-                orderStatus: "active",
-                adminApprove: true
+                orderStatus: 'active',
+                adminApprove: true,
             })
             console.log(endedOrders, approvedOrders)
-            res.status(200).json({ orders:{endedOrders,  approvedOrders}})
+            res.status(200).json({ orders: { endedOrders, approvedOrders } })
         }
     } catch (error) {
         next(error)
     }
 }
 
-const searchUserHistory = async (req, res, next) => {
+const searchUserHistory = async (req:CustomRequest, res:Response, next: NextFunction) => {
     try {
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
-        if (!req.user.hasOwnProperty('jwtPayload')) {
+        if (!req.user?.hasOwnProperty('jwtPayload')) {
             throw new Error(
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
@@ -174,15 +223,13 @@ const searchUserHistory = async (req, res, next) => {
         if (!user) {
             throw new Error('user with such id doesnt exist')
         }
-        const param = req.params.id;
+        const param = req.params.id
         const orders = await Orders.find({
             clientId: param,
         })
         console.log(orders)
         res.status(200).json({ orders })
-    } catch (error) {
-        
-    }
+    } catch (error) {}
 }
 
 export default {
