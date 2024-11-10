@@ -14,6 +14,9 @@ export const createOrderSchema = Joi.object({
     orderType: Joi.string()
     .valid("rent", "oil change", "repair", "maintenance", "insurance")
     .required(),
+    orderStatus: Joi.string()
+    .valid("active", "inProgress", "completed"),
+    adminApprove: Joi.bool()
 })
 
 export const updateOrderSchema = Joi.object({

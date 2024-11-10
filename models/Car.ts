@@ -44,7 +44,11 @@ const carSchema = new Schema({
         required: [true, '"Image" field is required'],
     },
     availability: {
-        type: [String],
+        type: [ {
+            orderId: String,
+              startDate: String,
+              endDate: String}
+           ],
         default: [],
     },
     isRemoved: {
