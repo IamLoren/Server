@@ -17,22 +17,6 @@ const createOrder = async (
     next: NextFunction
 ) => {
     try {
-        if (!req.hasOwnProperty('user')) {
-            throw new Error('Request doesnt have necessary property `user` ')
-        }
-        if (!req.user?.hasOwnProperty('jwtPayload')) {
-            throw new Error(
-                'Request doesnt have necessary property `user.jwtPayload` '
-            )
-        }
-        const userId = req.user.jwtPayload
-        const objectId = new mongoose.Types.ObjectId(userId)
-        const admin = await UserCredentials.findOne({ _id: objectId })
-        if (!admin) {
-            throw new Error('admin with such id doesnt exist')
-        }
-
-        if (admin.role === 'admin') {
             const orderData = req.body
             const convertedTime = {
                 time: {
@@ -57,9 +41,6 @@ const createOrder = async (
                 updatedAt: newOrder.updatedAt,
                 _id: newOrder._id,
             })
-        } else {
-            res.status(403)
-        }
     } catch (error) {
         next(error)
     }
