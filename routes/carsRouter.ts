@@ -10,4 +10,6 @@ carsRouter.put("/:id", authenticate, carsControllers.updateCar);
 
 carsRouter.put("/availability/:id", authenticate, carsControllers.updateAvailability);
 
+carsRouter.put("/changeavailability/:id", authenticate, carsControllers.changeAvailability);
+
 export default carsRouter;

@@ -16,7 +16,8 @@ export const createOrderSchema = Joi.object({
     .required(),
     orderStatus: Joi.string()
     .valid("active", "inProgress", "completed"),
-    adminApprove: Joi.bool()
+    adminApprove: Joi.bool(),
+    additionally: Joi.string(),
 })
 
 export const updateOrderSchema = Joi.object({
@@ -36,5 +37,6 @@ export const updateOrderSchema = Joi.object({
     orderStatus: Joi.string()
     .valid("active", "inProgress", "completed")
     .required(),
-    adminApprove: Joi.bool()
+    adminApprove: Joi.bool(),
+    additionally: Joi.string(),
 })

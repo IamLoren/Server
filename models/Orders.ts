@@ -46,6 +46,10 @@ const ordersSchema = new Schema({
         type: String,
         enum: ["active", "inProgress", "completed"],
         default: "active",
+    },
+    additionally: {
+        type: String,
+        default: ""
     }
 },
 { versionKey: false, timestamps: true })

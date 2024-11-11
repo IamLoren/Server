@@ -12,7 +12,7 @@ interface CustomRequest extends Request {
 }
 
 const createOrder = async (
-    req: CustomRequest,
+    req: Request,
     res: CreateOrderResponse,
     next: NextFunction
 ) => {
