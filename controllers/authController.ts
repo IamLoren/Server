@@ -75,7 +75,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
 
         const foundedUser = await authServices.findUser({ email })
         if (!foundedUser) {
-        return res.status(404)
+        return res.status(404).end()
         }
 
         const passwordCompare = await bcrypt.compare(
@@ -83,7 +83,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
             foundedUser.password
         )
         if (!passwordCompare) {
-           return res.status(401);
+           return res.status(401).end();
         }
 
         const { JWT_SECRET } = process.env
