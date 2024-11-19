@@ -75,6 +75,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
 
         const foundedUser = await authServices.findUser({ email })
         if (!foundedUser) {
+            res.status(404);
             throw new Error('This user was not registered in Data Base')
         }
 
@@ -83,6 +84,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
             foundedUser.password
         )
         if (!passwordCompare) {
+            res.status(401);
             throw new Error('Invalid email or password')
         }
 
