@@ -1,10 +1,10 @@
 import Joi from "joi";
 
 export const signUpSchema = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).required(),
-    password: Joi.string().min(8).required(),
+    firstName: Joi.string().max(20).required(),
+    lastName: Joi.string().max(20).required(),
+    email: Joi.string().pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).max(50).required(),
+    password: Joi.string().min(8).max(100).required(),
     role: Joi.string().required(),
     terms: Joi.bool()
     .valid(true)
