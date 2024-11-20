@@ -62,7 +62,8 @@ const register = async (
             },
         })
     } catch (error) {
-        next(error)
+        next(error);
+        return
     }
 }
 
@@ -70,7 +71,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
     try {
         const { email, password } = req.body
         if (!email || !password) {
-            throw new Error('Email and password  are required')
+            return res.status(400).end();
         }
 
         const foundedUser = await authServices.findUser({ email })
@@ -100,8 +101,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
             throw new Error('User profile was not founded')
         }
 
-        if (userProfile) {
-            res.json({
+            return res.json({
                 token,
                 user: {
                     id: foundedUser._id.toString(),
@@ -109,15 +109,15 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
                     firstName: foundedUser.firstName,
                     lastName: foundedUser.lastName,
                     role: foundedUser.role,
-                    theme: userProfile.theme,
-                    avatarURL: userProfile.avatarURL,
-                    favorites: userProfile.favorites,
-                    history: userProfile.history,
+                    theme: userProfile?.theme,
+                    avatarURL: userProfile?.avatarURL,
+                    favorites: userProfile?.favorites,
+                    history: userProfile?.history,
                 },
             })
-        }
     } catch (error) {
-        next(error)
+        next(error);
+        return
     }
 }
 

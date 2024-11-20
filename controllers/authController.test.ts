@@ -18,6 +18,7 @@ import bcrypt from 'bcrypt'
 import HttpError from '../services/HTTPError'
 import UserProfile from '../models/UserProfile'
 import UserCredentials from '../models/UserCredentials'
+import { Request, Response, NextFunction } from 'express';
 dotenv.config()
 
 const { JWT_SECRET } = process.env
@@ -311,17 +312,14 @@ describe('loginfunction', () => {
                 password: '12345678',
             },
         }
-        const res = { json: jest.fn() }
+        const res = {status: jest.fn().mockReturnThis(), } as Partial<Response>;
         const next = jest.fn()
 
         ;(findUser as jest.Mock).mockResolvedValue(null)
 
-        await authController.login(req as any, res as any, next as any)
+        await authController.login(req as Request, res as Response, next as NextFunction)
 
-        expect(next).toHaveBeenCalled()
-        expect(next.mock.calls[0][0].message).toBe(
-            'This user was not registered in Data Base'
-        )
+        expect(res.status).toHaveBeenCalledWith(404);
     })
 
     test('should generate error when password is not valid', async () => {
