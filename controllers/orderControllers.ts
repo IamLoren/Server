@@ -18,6 +18,10 @@ const createOrder = async (
 ) => {
     try {
         const orderData = req.body
+        if (orderData.createdBy === 'user' && orderData.orderType !== 'rent') {
+            return res.status(403).end();
+        }
+
         const convertedTime = {
             time: {
                 startDate: new Date(orderData.time.startDate).toISOString(),
@@ -26,7 +30,7 @@ const createOrder = async (
         }
         const orderDataISODate = { ...orderData, ...convertedTime }
         const newOrder = await Orders.create(orderDataISODate)
-        res.status(201).json({
+        return res.status(201).json({
             adminApprove: newOrder.adminApprove,
             carId: newOrder.carId,
             clientEmail: newOrder.clientEmail,
@@ -42,7 +46,8 @@ const createOrder = async (
             _id: newOrder._id,
         })
     } catch (error) {
-        next(error)
+        next(error);
+        return
     }
 }
 
@@ -126,7 +131,7 @@ const updateOrder = async (
             }
             return res.status(200).json({ updatedOrder })
         } else {
-           return res.status(403)
+            return res.status(403)
         }
     } catch (error) {
         next(error)
