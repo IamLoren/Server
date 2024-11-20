@@ -19,7 +19,7 @@ const createOrder = async (
     try {
         const orderData = req.body
         if (orderData.createdBy === 'user' && orderData.orderType !== 'rent') {
-            return res.status(403).end();
+            return res.status(403).json({ message: 'User can only create rent orders' });
         }
 
         const convertedTime = {
