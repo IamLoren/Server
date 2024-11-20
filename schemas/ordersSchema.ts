@@ -12,7 +12,12 @@ export const createOrderSchema = Joi.object({
     }).required(),
     cost: Joi.number().positive().required(),
     orderType: Joi.string()
-    .valid("rent", "oil change", "repair", "maintenance", "insurance")
+    .valid('rent', 'oil change', 'repair', 'maintenance', 'insurance')
+    .when('createdBy', {
+      is: Joi.valid('user'), 
+      then: Joi.valid('rent'), 
+      otherwise: Joi.valid('rent', 'oil change', 'repair', 'maintenance', 'insurance'), // Адмін може вибирати всі типи
+    })
     .required(),
     orderStatus: Joi.string()
     .valid("active", "inProgress", "completed"),
