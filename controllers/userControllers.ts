@@ -71,6 +71,8 @@ const getOneUser = async (req, res, next) =>{
             res.status(200).json({
                 client,
             })
+        } else {
+            return res.status(403).end();
         }
     } catch (error) {
         next(error)
