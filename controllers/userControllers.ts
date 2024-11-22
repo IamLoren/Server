@@ -65,12 +65,15 @@ const getOneUser = async (req, res, next) =>{
         if (!user) {
            return res.status(404).json({message: 'admin with such id doesnt exist'})
         }
-        if (user.role === 'admin') {
-           
+        if (user.role === 'admin') { 
             const client = await UserCredentials.findById(param);
-            res.status(200).json({
+            if(client) {
+                 res.status(200).json({
                 client,
             })
+            } else {
+                return res.status(404).end();
+            }
         } else {
             return res.status(403).end();
         }
