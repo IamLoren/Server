@@ -149,6 +149,7 @@ const updateFavorites = async (
 
 const deleteUserController = async (req, res, next) => {
     try {
+        const idForDeletion = req.params.id;
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
@@ -158,7 +159,7 @@ const deleteUserController = async (req, res, next) => {
             )
         }
         const userId = req.user.jwtPayload
-        const objectId = new mongoose.Types.ObjectId(userId)
+        const objectId = new mongoose.Types.ObjectId(idForDeletion)
 
         await UserCredentials.deleteOne({ _id: objectId })
         await UserProfile.deleteOne({ userId: objectId })
