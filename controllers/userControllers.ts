@@ -38,6 +38,8 @@ const getAllUsers = async (req: ReqInt, res: Response, next: NextFunction) => {
             res.status(200).json({
                 allUsers,
             })
+        } else {
+            res.status(403).end()
         }
     } catch (error) {
         next(error)
