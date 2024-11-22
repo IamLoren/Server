@@ -149,8 +149,7 @@ const updateFavorites = async (
 
 const deleteUserController = async (req, res, next) => {
     try {
-        const idForDeletion = req.params.id;
-        console.log(idForDeletion)
+        const idForDeletion = req.params.userId;
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
@@ -159,13 +158,12 @@ const deleteUserController = async (req, res, next) => {
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
         }
-        // const userId = req.user.jwtPayload
+
         const objectId = new mongoose.Types.ObjectId(idForDeletion)
 
        const deleteCredentials = await UserCredentials.deleteOne({ _id: objectId })
        const deleteProfile = await UserProfile.deleteOne({ userId: objectId })
-       console.log(deleteCredentials) 
-       console.log(deleteProfile) 
+
        return res
             .status(200)
             .json({ message: 'User and profile deleted successfully' })
