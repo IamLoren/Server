@@ -46,8 +46,8 @@ const getAllUsers = async (req: ReqInt, res: Response, next: NextFunction) => {
     }
 }
 
-const getOneUser = async (req, res, next) =>{
-    const param = req.params.id;
+const getOneUser = async (req, res, next) => {
+    const param = req.params.id
     console.log(req.params.id)
     try {
         if (!req.hasOwnProperty('user')) {
@@ -63,19 +63,21 @@ const getOneUser = async (req, res, next) =>{
         const user = await UserCredentials.findOne({ _id: objectId })
 
         if (!user) {
-           return res.status(404).json({message: 'admin with such id doesnt exist'})
+            return res
+                .status(404)
+                .json({ message: 'admin with such id doesnt exist' })
         }
-        if (user.role === 'admin') { 
-            const client = await UserCredentials.findById(param);
-            if(client) {
-                 res.status(200).json({
-                client,
-            })
+        if (user.role === 'admin') {
+            const client = await UserCredentials.findById(param)
+            if (client) {
+                res.status(200).json({
+                    client,
+                })
             } else {
-                return res.status(404).end();
+                return res.status(404).end()
             }
         } else {
-            return res.status(403).end();
+            return res.status(403).end()
         }
     } catch (error) {
         next(error)
@@ -101,8 +103,9 @@ const updateFavorites = async (
         const carId = req.body._id
         if (!carId) {
             return res.status(400).json({
-                message: "Request body doesn't contain carId to add to favorites",
-            });
+                message:
+                    "Request body doesn't contain carId to add to favorites",
+            })
         }
 
         const car = req.body
@@ -123,7 +126,7 @@ const updateFavorites = async (
                 { new: true }
             )
             if (updatedProfile) {
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Car removed from favorites',
                     arrFavorite: updatedProfile.favorites,
                 })
@@ -136,7 +139,7 @@ const updateFavorites = async (
             )
             if (newFavorite) {
                 const arrFavorite = newFavorite.favorites
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Car added to favorites',
                     arrFavorite,
                 })
@@ -149,7 +152,7 @@ const updateFavorites = async (
 
 const deleteUserController = async (req, res, next) => {
     try {
-        const idForDeletion = req.params.userId;
+        const idForDeletion = req.params.userId
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
@@ -161,10 +164,12 @@ const deleteUserController = async (req, res, next) => {
 
         const objectId = new mongoose.Types.ObjectId(idForDeletion)
 
-       const deleteCredentials = await UserCredentials.deleteOne({ _id: objectId })
-       const deleteProfile = await UserProfile.deleteOne({ userId: objectId })
+        const deleteCredentials = await UserCredentials.deleteOne({
+            _id: objectId,
+        })
+        const deleteProfile = await UserProfile.deleteOne({ userId: objectId })
 
-       return res
+        return res
             .status(200)
             .json({ message: 'User and profile deleted successfully' })
     } catch (error) {
@@ -179,5 +184,5 @@ export default {
     getAllUsers,
     updateFavorites,
     deleteUserController,
-    getOneUser
+    getOneUser,
 }
