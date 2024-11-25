@@ -52,11 +52,15 @@ const updateCar = async (
             const updatedData = req.body
             const updatedCar = await Car.findByIdAndUpdate(
                 objectId,
-                {  $push: {
-                    availability: {
-                        $each: [updatedData],
+                {
+                    $push: {
+                        availability: {
+                            orderId: updatedData.orderId,
+                            startDate: updatedData.startDate,
+                            endDate: updatedData.endDate,
+                        },
                     },
-                }, },
+                },
                 {
                     new: true,
                     runValidators: true,
