@@ -41,7 +41,7 @@ const updateCar = async (
         const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId)
         const admin = await UserCredentials.findOne({ _id: objectId })
-
+        console.log(admin)
         if (!admin) {
             throw new Error('admin with such id doesnt exist')
         }
@@ -52,15 +52,7 @@ const updateCar = async (
             const updatedData = req.body
             const updatedCar = await Car.findByIdAndUpdate(
                 objectId,
-                {
-                    $push: {
-                        availability: {
-                            orderId: updatedData.orderId,
-                            startDate: updatedData.startDate,
-                            endDate: updatedData.endDate,
-                        },
-                    },
-                },
+                { $push: { availability: updatedData } },
                 {
                     new: true,
                     runValidators: true,
@@ -72,7 +64,7 @@ const updateCar = async (
             console.log(updatedCar)
             res.status(200).json({ updatedCar })
         } else {
-            res.status(403)
+           return res.status(403).end();
         }
     } catch (error) {
         next(error)
