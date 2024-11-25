@@ -100,9 +100,9 @@ const updateFavorites = async (
         const objectId = new mongoose.Types.ObjectId(userId)
         const carId = req.body._id
         if (!carId) {
-            throw new Error(
-                'Request body doesnt have car data to add to favorites'
-            )
+            return res.status(400).json({
+                message: "Request body doesn't contain carId to add to favorites",
+            });
         }
 
         const car = req.body
