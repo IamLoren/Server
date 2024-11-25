@@ -41,7 +41,7 @@ const updateCar = async (
         const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId)
         const admin = await UserCredentials.findOne({ _id: objectId })
-
+        console.log(admin)
         if (!admin) {
             throw new Error('admin with such id doesnt exist')
         }
