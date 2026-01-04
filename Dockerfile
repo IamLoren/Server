@@ -16,6 +16,10 @@ COPY . .
 # Компілюємо TypeScript в JavaScript
 RUN npm run build
 
+# Перевіряємо, що build успішно створив файли
+RUN ls -la build/ && \
+    test -f build/index.js || (echo "ERROR: build/index.js not found!" && exit 1)
+
 # Видаляємо devDependencies та непотрібні файли для зменшення розміру
 RUN npm prune --production && \
     rm -rf node_modules/.cache && \
