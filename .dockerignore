@@ -1,0 +1,59 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output (буде створено в контейнері)
+build
+dist
+
+# Test files
+coverage
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+jest.config.js
+jest-mongodb-config.js
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# AWS dependencies (великі, не потрібні в production)
+aws
+
+# Assets (якщо не потрібні в контейнері)
+assets
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Misc
+.DS_Store
+Thumbs.db
+

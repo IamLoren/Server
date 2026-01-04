@@ -84,7 +84,7 @@ const login = async (req: signInReq, res: signInRes, next: NextFunction) => {
             foundedUser.password
         )
         if (!passwordCompare) {
-           return res.status(401).json({message: "password incorrect"});
+           return res.status(401).end();
         }
 
         const { JWT_SECRET } = process.env

@@ -1,0 +1,42 @@
+# Docker Compose для локального тестування перед деплоєм в Azure
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Додайте ваші змінні оточення тут або використовуйте .env файл
+      # - DB_HOST=${DB_HOST}
+      # - JWT_SECRET=${JWT_SECRET}
+    env_file:
+      - .env
+    restart: unless-stopped
+    # Розкоментуйте, якщо потрібно підключити до MongoDB контейнера
+    # depends_on:
+    #   - mongodb
+    # networks:
+    #   - app-network
+
+  # Розкоментуйте, якщо хочете запустити MongoDB локально
+  # mongodb:
+  #   image: mongo:7
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongodb-data:/data/db
+  #   networks:
+  #     - app-network
+
+# volumes:
+#   mongodb-data:
+
+# networks:
+#   app-network:
+#     driver: bridge
+

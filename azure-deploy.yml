@@ -1,0 +1,49 @@
+# Azure Container Apps / App Service deployment configuration
+# Використовується для автоматичного деплою через GitHub Actions або Azure DevOps
+
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: your-app-name    # Замініть на назву вашого Azure App Service
+  NODE_VERSION: '18.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    
+    - name: Build Docker image
+      run: docker build -t ${{ env.AZURE_WEBAPP_NAME }}:latest .
+    
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Push to Azure Container Registry
+      run: |
+        az acr login --name ${{ secrets.ACR_NAME }}
+        docker tag ${{ env.AZURE_WEBAPP_NAME }}:latest ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.AZURE_WEBAPP_NAME }}:latest
+        docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.AZURE_WEBAPP_NAME }}:latest
+    
+    - name: Deploy to Azure Container Apps
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        images: ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.AZURE_WEBAPP_NAME }}:latest
+

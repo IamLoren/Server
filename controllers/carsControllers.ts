@@ -40,8 +40,8 @@ const updateCar = async (
         }
         const userId = req.user.jwtPayload
         const objectId = new mongoose.Types.ObjectId(userId)
-        const admin = await UserCredentials.findOne({ _id: objectId })
-        console.log(admin)
+        const admin = await UserCredentials.findOne({ _id: objectId });
+        
         if (!admin) {
             throw new Error('admin with such id doesnt exist')
         }
@@ -59,15 +59,15 @@ const updateCar = async (
                 }
             )
             if (!updatedCar) {
-                res.status(404).json({ message: 'not updated' })
+                return res.status(404).json({ message: 'not updated' })
             }
-            console.log(updatedCar)
-            res.status(200).json({ updatedCar })
+            return res.status(200).json({ updatedCar })
         } else {
            return res.status(403).end();
         }
     } catch (error) {
         next(error)
+        return
     }
 }
 

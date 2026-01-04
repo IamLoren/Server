@@ -17,11 +17,16 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 
-app. use("/api/user", userRouter);
+app.use("/api/user", userRouter);
 
 app.use("/api/cars", carsRouter);
 
 app.use("/api/orders", ordersRouter);
+
+// Health check endpoint для моніторингу
+app.get("/health", (_, res) => {
+    res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
 app.use((_, res) => {
     res.status(404).json({message: "Not found"})
