@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "ESNext",
         "module": "ESNext",
-        "moduleResolution": "bundler",
+        "moduleResolution": "node",
         "lib": ["ESNext", "DOM"],
         "rootDir": ".",
         "outDir": "build",
@@ -123,8 +123,13 @@
         "skipLibCheck": true /* Skip type checking all .d.ts files. */
     },
     "include": [
-    "src/**/*",
-    "**/*.test.ts",   
-    "**/*.test.tsx"
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+    "exclude": [
+    "node_modules",
+    "build",
+    "coverage",
+    "aws"
   ]
 }
