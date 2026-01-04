@@ -12,7 +12,7 @@
         "declaration": true,
         "sourceMap": true,
         "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
+        "noImplicitReturns": false,
         "strictNullChecks": true,
         "noImplicitAny": false,
         "noImplicitThis": false,

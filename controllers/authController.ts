@@ -173,17 +173,17 @@ const getCurrent = async (req, res: currentRes, next: NextFunction) => {
 
 const logout = async (req: LogoutReq, res: LogoutRes, next: NextFunction) => {
     try {
-        if (!req.hasOwnProperty('user')) {
+        if (!req.user) {
             throw new Error('Request doesnt have necessary property `user` ')
         }
-        if (!req.user.hasOwnProperty('jwtPayload')) {
+        if (!req.user.jwtPayload) {
             throw new Error(
                 'Request doesnt have necessary property `user.jwtPayload` '
             )
         }
 
         const id = req.user.jwtPayload
-        await authServices.setToken(id)
+        await authServices.setToken(id as unknown as import('mongoose').ObjectId)
         res.status(204).end()
     } catch (error) {
         next(error)

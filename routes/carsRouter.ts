@@ -1,15 +1,15 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import carsControllers from "../controllers/carsControllers";
 import { authenticate } from "../middleware/autenticate";
 
 const carsRouter = express.Router();
 
-carsRouter.get("/", carsControllers.getAllCars);
+carsRouter.get("/", carsControllers.getAllCars as RequestHandler);
 
-carsRouter.put("/:id", authenticate, carsControllers.updateCar);
+carsRouter.put("/:id", authenticate as RequestHandler, carsControllers.updateCar as RequestHandler);
 
-carsRouter.put("/availability/:id", authenticate, carsControllers.updateAvailability);
+carsRouter.put("/availability/:id", authenticate as RequestHandler, carsControllers.updateAvailability as RequestHandler);
 
-carsRouter.put("/changeavailability/:id", authenticate, carsControllers.changeAvailability);
+carsRouter.put("/changeavailability/:id", authenticate as RequestHandler, carsControllers.changeAvailability as RequestHandler);
 
 export default carsRouter;

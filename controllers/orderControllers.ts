@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import mongoose from 'mongoose'
 import Orders from '../models/Orders'
-import { CreateOrderResponse } from '../types/ordersTypes'
 import UserCredentials from '../models/UserCredentials'
 import Car from '../models/Car'
 
@@ -13,7 +12,7 @@ interface CustomRequest extends Request {
 
 const createOrder = async (
     req: Request,
-    res: CreateOrderResponse,
+    res: Response,
     next: NextFunction
 ) => {
     try {

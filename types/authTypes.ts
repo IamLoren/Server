@@ -86,8 +86,8 @@ export interface currentRes extends Response {
 }
 
 export interface LogoutReq extends Request {
-    user: {
-        jwtPayload: ObjectId
+    user?: {
+        jwtPayload: string
     }
 }
 
