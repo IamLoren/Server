@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { ObjectId, Types } from 'mongoose';
-import {IUserCredentials, signUpArguments} from "../types/authTypes"
+import {IUserCredentials, signUpArguments} from "../types/authTypes.js"
 import { FilterQuery } from "mongoose";
-import UserCredentials from "../models/UserCredentials";
+import UserCredentials from "../models/UserCredentials.js";
 
 export const signUp = async (data:signUpArguments) => {
   const { password } = data;

@@ -1,8 +1,8 @@
 import express, { RequestHandler } from "express";
-import { authenticate } from "../middleware/autenticate";
-import orderControllers from "../controllers/orderControllers";
-import validateBody from "../middleware/validateBody";
-import { createOrderSchema, updateOrderSchema } from "../schemas/ordersSchema";
+import { authenticate } from "../middleware/autenticate.js";
+import orderControllers from "../controllers/orderControllers.js";
+import validateBody from "../middleware/validateBody.js";
+import { createOrderSchema, updateOrderSchema } from "../schemas/ordersSchema.js";
 
 const ordersRouter = express.Router();
 
