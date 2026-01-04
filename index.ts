@@ -32,7 +32,9 @@ app.use((_, res) => {
     res.status(404).json({ message: 'Not found' })
 })
 
-const { DB_HOST, PORT } = process.env
+const { DB_HOST } = process.env
+const PORT = process.env.PORT || 3000
+
 if (!DB_HOST) {
     console.error('DB_HOST is not defined in environment variables')
     process.exit(1)
