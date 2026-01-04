@@ -1,50 +1,53 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import authRouter from './routes/authRouter.js';
-import carsRouter from './routes/carsRouter.js';
-import userRouter from './routes/userRouter.js';
-import ordersRouter from './routes/ordersRouter.js';
+import express from 'express'
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import cors from 'cors'
+import authRouter from './routes/authRouter.js'
+import carsRouter from './routes/carsRouter.js'
+import userRouter from './routes/userRouter.js'
+import ordersRouter from './routes/ordersRouter.js'
 
-dotenv.config();
+dotenv.config()
 
-const app = express();
+const app = express()
 
-const corsMiddleware = cors();
-app.use(corsMiddleware);
-app.use(express.json());
+const corsMiddleware = cors()
+app.use(corsMiddleware)
+app.use(express.json())
 
-app.use("/api/auth", authRouter);
+app.use('/api/auth', authRouter)
 
-app.use("/api/user", userRouter);
+app.use('/api/user', userRouter)
 
-app.use("/api/cars", carsRouter);
+app.use('/api/cars', carsRouter)
 
-app.use("/api/orders", ordersRouter);
+app.use('/api/orders', ordersRouter)
 
 // Health check endpoint для моніторингу
-app.get("/health", (_, res) => {
-    res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
-});
+app.get('/health', (_, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
+})
 
 app.use((_, res) => {
-    res.status(404).json({message: "Not found"})
+    res.status(404).json({ message: 'Not found' })
 })
 
-const { DB_HOST, PORT } = process.env;
+const { DB_HOST, PORT } = process.env
 if (!DB_HOST) {
-    console.error('DB_HOST is not defined in environment variables');
-    process.exit(1);
-  }
-
-mongoose.connect(DB_HOST)
-.then(()=> {
-    app.listen(PORT, () => console.log('Server is runing!'));
-})
-.catch(error => {
-    console.log(error.message)
+    console.error('DB_HOST is not defined in environment variables')
     process.exit(1)
-})
+}
 
-export default app;
+mongoose
+    .connect(DB_HOST)
+    .then(() => {
+        app.listen(Number(PORT), '0.0.0.0', () =>
+            console.log(`Server is running on port ${PORT}!`)
+        )
+    })
+    .catch((error) => {
+        console.log(error.message)
+        process.exit(1)
+    })
+
+export default app
