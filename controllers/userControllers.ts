@@ -2,22 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 import UserCredentials from '../models/UserCredentials'
 import UserProfile from '../models/UserProfile'
 import mongoose from 'mongoose'
-import { boolean } from 'joi'
 
-interface ReqInt extends Request {
+interface CustomRequest extends Request {
     user?: { jwtPayload: string }
-    body: { _id: string }
-}
-interface ResInt extends Response {
-    status: (code: number) => this
-    json: (body: {
-        message?: string
-
-        arrFavorite?: any[]
-    }) => this
 }
 
-const getAllUsers = async (req: ReqInt, res: Response, next: NextFunction) => {
+const getAllUsers = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         if (!req.hasOwnProperty('user')) {
             throw new Error('Request doesnt have necessary property `user` ')
@@ -85,8 +75,8 @@ const getOneUser = async (req, res, next) => {
 }
 
 const updateFavorites = async (
-    req: ReqInt,
-    res: ResInt,
+    req: Request,
+    res: Response,
     next: NextFunction
 ) => {
     try {
