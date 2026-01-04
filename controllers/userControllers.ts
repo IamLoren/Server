@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import UserCredentials from '../models/UserCredentials'
-import UserProfile from '../models/UserProfile'
+import UserCredentials from '../models/UserCredentials.js'
+import UserProfile from '../models/UserProfile.js'
 import mongoose from 'mongoose'
 
 interface CustomRequest extends Request {

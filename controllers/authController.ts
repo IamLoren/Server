@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import * as authServices from '../services/authServices'
+import * as authServices from '../services/authServices.js'
 import {
     currentReq,
     currentRes,
@@ -11,10 +11,10 @@ import {
     RegisterRes,
     signInReq,
     signInRes,
-} from '../types/authTypes'
-import HttpError from '../services/HTTPError'
-import UserProfile from '../models/UserProfile'
-import UserCredentials from '../models/UserCredentials'
+} from '../types/authTypes.js'
+import HttpError from '../services/HTTPError.js'
+import UserProfile from '../models/UserProfile.js'
+import UserCredentials from '../models/UserCredentials.js'
 
 const register = async (
     req: RegisterReq,

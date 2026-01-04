@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import Car from '../models/Car'
+import Car from '../models/Car.js'
 import mongoose from 'mongoose'
-import UserCredentials from '../models/UserCredentials'
+import UserCredentials from '../models/UserCredentials.js'
 
 interface CustomRequest extends Request {
     user?: {

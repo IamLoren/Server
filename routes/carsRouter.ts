@@ -1,6 +1,6 @@
 import express, { RequestHandler } from "express";
-import carsControllers from "../controllers/carsControllers";
-import { authenticate } from "../middleware/autenticate";
+import carsControllers from "../controllers/carsControllers.js";
+import { authenticate } from "../middleware/autenticate.js";
 
 const carsRouter = express.Router();
 
