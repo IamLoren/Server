@@ -131,7 +131,8 @@ const updateFavorites = async (
                     arrFavorite: updatedProfile.favorites,
                 })
             }
-        } else if (!carExists) {
+            return res.status(500).json({ message: 'Failed to update profile' })
+        } else {
             const newFavorite = await UserProfile.findOneAndUpdate(
                 { userId: objectId },
                 { $push: { favorites: car } },
@@ -144,9 +145,11 @@ const updateFavorites = async (
                     arrFavorite,
                 })
             }
+            return res.status(500).json({ message: 'Failed to update profile' })
         }
     } catch (error) {
         next(error)
+        return
     }
 }
 
